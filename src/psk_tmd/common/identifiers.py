@@ -11,10 +11,10 @@ class EntityPrefix(str, Enum):
 
 
 def make_sequential_id(
-    prefix: EntityPrefix,
-    number: int,
-    width: int = 6,
-) -> str:
+        prefix: EntityPrefix,
+        number: int,
+        width: int = 6,
+    ) -> str:
     """
     Create a zero-padded internal project identifier.
 
