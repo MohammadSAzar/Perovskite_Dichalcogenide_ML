@@ -105,8 +105,21 @@ def test_evidence_strength_values():
 
 def test_evidence_type_values():
     assert EvidenceType.XPS.value == "xps"
+    assert EvidenceType.UPS.value == "ups"
+    assert EvidenceType.PL.value == "pl"
+    assert EvidenceType.ESR.value == "esr"
+    assert EvidenceType.RADICAL_TRAPPING.value == "radical_trapping"
     assert EvidenceType.MOTT_SCHOTTKY.value == "mott_schottky"
+    assert EvidenceType.PHOTODEPOSITION.value == "photodeposition"
+    assert EvidenceType.PHOTOCURRENT.value == "photocurrent"
+    assert EvidenceType.EIS.value == "eis"
+    assert EvidenceType.CV.value == "cv"
     assert EvidenceType.DFT.value == "dft"
+    assert EvidenceType.BAND_ALIGNMENT.value == "band_alignment"
+    assert EvidenceType.WORK_FUNCTION.value == "work_function"
+    assert EvidenceType.KELVIN_PROBE.value == "kelvin_probe"
+    assert EvidenceType.OTHER.value == "other"
+    assert EvidenceType.UNKNOWN.value == "unknown"
 
 
 # ---------------------------------------------------------------------------
@@ -139,5 +152,4 @@ def test_mapping_status_values():
     assert MappingStatus.EXACT.value == "exact"
     assert MappingStatus.AMBIGUOUS.value == "ambiguous"
     assert MappingStatus.NO_MATCH.value == "no_match"
-
 

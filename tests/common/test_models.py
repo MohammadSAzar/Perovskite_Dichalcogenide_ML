@@ -12,6 +12,7 @@ from psk_tmd.common.constants import (
     MechanismLabel,
     PhotocatalyticApplication,
     SynthesisStepRole,
+    ExtractorType,
 )
 from psk_tmd.common.models import (
     ExperimentalSample,
@@ -333,21 +334,27 @@ def test_photocatalytic_test_rejects_negative_hydrogen_rate():
 
 
 # ---------------------------------------------------------------------------
-# EXTRACTION AND PROVENANCE
+# EXTRACTION RECORDS
 # ---------------------------------------------------------------------------
 def test_extraction_record_valid():
-    extraction = ExtractionRecord(
-        extraction_id="EXT-000001",
-        paper_id="PPR-000001",
-        raw_value="S-scheme heterojunction",
-        normalized_value="s_scheme",
+    record = ExtractionRecord(
+        extraction_id="EXT-0001",
+        paper_id="PPR-0001",
+        target_table="photocatalytic_tests",
+        target_record_id="TST-0001",
+        target_field="test_duration_h",
+        extractor_type=ExtractorType.MANUAL,
+        source_location="Section 2.4",
+        raw_value="120 min",
+        normalized_value="2.0 h",
         confidence=0.95,
         manual_verified=True,
     )
 
-    assert extraction.raw_value == "S-scheme heterojunction"
-    assert extraction.confidence == 0.95
-    assert extraction.manual_verified is True
+    assert record.target_table == "photocatalytic_tests"
+    assert record.target_record_id == "TST-0001"
+    assert record.target_field == "test_duration_h"
+    assert record.manual_verified is True
 
 
 def test_extraction_record_rejects_invalid_confidence():

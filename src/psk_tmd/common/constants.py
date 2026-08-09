@@ -120,6 +120,7 @@ class EvidenceType(str, Enum):
     PHOTODEPOSITION = "photodeposition"
     PHOTOCURRENT = "photocurrent"
     CV = "cv"
+    EIS = "eis"
     DFT = "dft"
     BAND_ALIGNMENT = "band_alignment"
     WORK_FUNCTION = "work_function"
@@ -167,5 +168,4 @@ class MappingStatus(str, Enum):
     AMBIGUOUS = "ambiguous"
     UNRESOLVED = "unresolved"
     NO_MATCH = "no_match"
-
 

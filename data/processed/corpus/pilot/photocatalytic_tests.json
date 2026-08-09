@@ -1,0 +1,31 @@
+[
+  {
+    "test_id": "TST-0001",
+    "sample_id": "SMP-0002",
+    "application_type": "dye_degradation",
+    "reaction_type": "photocatalytic degradation",
+    "target_species": "methylene blue",
+    "light_source": "500 W xenon lamp",
+    "wavelength_nm": null,
+    "light_intensity": "30000 Lux",
+    "visible_light_only": false,
+    "catalyst_mass_mg": 100.0,
+    "solution_volume_ml": 100.0,
+    "ph": null,
+    "sacrificial_agent": null,
+    "cocatalyst": null,
+    "test_duration_h": 2.0,
+    "performance_metric_name": "removal efficiency",
+    "performance_metric_value": 89.6,
+    "performance_metric_unit": "%",
+    "hydrogen_amount_umol": null,
+    "hydrogen_rate_reported_value": null,
+    "hydrogen_rate_reported_unit": null,
+    "hydrogen_rate_standardized_umol_g_h": null,
+    "sth_percent": null,
+    "apparent_quantum_yield_percent": null,
+    "cycles": null,
+    "performance_notes": "Initial MB concentration was 10 mg/L. The suspension was stirred in the dark for 30 min to reach adsorption-desorption equilibrium before simulated-sunlight irradiation. The catalyst-to-solution loading was 1 g/L. The quartz beaker was positioned 20 cm from the light source."
+  }
+]
+

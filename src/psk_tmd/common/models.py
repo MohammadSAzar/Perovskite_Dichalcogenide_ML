@@ -241,13 +241,16 @@ class ExtractionRecord(BaseModel):
     extraction_id: str
     paper_id: str
 
+    target_table: str | None = None
+    target_record_id: str | None = None
+    target_field: str | None = None
+
     extractor_type: ExtractorType = ExtractorType.UNKNOWN
     extractor_name: str | None = None
     extractor_version: str | None = None
     extraction_date: date | None = None
 
     source_location: str | None = None
-
     raw_value: str | None = None
     normalized_value: str | None = None
 

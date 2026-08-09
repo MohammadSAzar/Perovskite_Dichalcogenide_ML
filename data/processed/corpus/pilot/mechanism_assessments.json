@@ -1,0 +1,14 @@
+[
+  {
+    "mechanism_assessment_id": "MEA-0001",
+    "sample_id": "SMP-0002",
+    "mechanism_reported": "S-scheme heterojunction",
+    "mechanism_normalized": "s_scheme",
+    "charge_transfer_class": "mediated_recombination",
+    "claim_explicit": true,
+    "assessment_confidence": null,
+    "manual_review_status": "reviewed",
+    "label_status": "accepted",
+    "reviewer_notes": "The authors explicitly identify the MoS2/PbTiO3 system as an S-scheme heterojunction. Detailed mechanism characterization is centered on the optimized 1%-MoS2/PbTiO3 sample. Type-II transfer is explicitly considered and rejected using band-position arguments together with radical-generation evidence."
+  }
+]

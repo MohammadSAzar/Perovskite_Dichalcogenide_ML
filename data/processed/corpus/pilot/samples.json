@@ -1,0 +1,274 @@
+[
+  {
+    "sample_id": "SMP-0001",
+    "paper_id": "PPR-0001",
+    "sample_name_reported": "0.5%-MoS2/PbTiO3",
+    "psk": {
+      "formula_reported": "PbTiO3",
+      "formula_normalized": "PbTiO3",
+      "parent_formula": "PbTiO3",
+      "a_site_elements": [
+        "Pb"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
+      "a_site_dopants": [],
+      "b_site_dopants": [],
+      "anion_site_dopants": [],
+      "phase_reported": "tetragonal perovskite",
+      "space_group_reported": null,
+      "morphology": "nanoplates",
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "tmd": {
+      "formula_reported": "MoS2",
+      "formula_normalized": "MoS2",
+      "parent_formula": "MoS2",
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
+      "m_site_dopants": [],
+      "x_site_dopants": [],
+      "phase_reported": null,
+      "layer_description": null,
+      "morphology": null,
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "heterostructure": {
+      "heterostructure_type_reported": "MoS2/PbTiO3 composite",
+      "component_ratio_reported": "0.5 wt% MoS2",
+      "interface_description": null,
+      "contact_type": null,
+      "preferred_facet_reported": null,
+      "cocatalyst_present": false,
+      "cocatalyst": null,
+      "mediator_present": false,
+      "mediator": null,
+      "morphology": null,
+      "interface_notes": null
+    },
+    "pair_id": "PAIR-0001",
+    "psk_fraction": 99.5,
+    "tmd_fraction": 0.5,
+    "fraction_basis": "weight_percent",
+    "is_reference_sample": false,
+    "notes": null
+  },
+  {
+    "sample_id": "SMP-0002",
+    "paper_id": "PPR-0001",
+    "sample_name_reported": "1%-MoS2/PbTiO3",
+    "psk": {
+      "formula_reported": "PbTiO3",
+      "formula_normalized": "PbTiO3",
+      "parent_formula": "PbTiO3",
+      "a_site_elements": [
+        "Pb"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
+      "a_site_dopants": [],
+      "b_site_dopants": [],
+      "anion_site_dopants": [],
+      "phase_reported": "tetragonal perovskite",
+      "space_group_reported": null,
+      "morphology": "nanoplates",
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "tmd": {
+      "formula_reported": "MoS2",
+      "formula_normalized": "MoS2",
+      "parent_formula": "MoS2",
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
+      "m_site_dopants": [],
+      "x_site_dopants": [],
+      "phase_reported": "hexagonal",
+      "layer_description": null,
+      "morphology": "3D pyramidal",
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "heterostructure": {
+      "heterostructure_type_reported": "MoS2/PbTiO3 composite",
+      "component_ratio_reported": "1 wt% MoS2",
+      "interface_description": "Pyramidal MoS2 selectively attached to exposed surfaces of PbTiO3 nanoplates with a tightly connected interface",
+      "contact_type": null,
+      "preferred_facet_reported": null,
+      "cocatalyst_present": false,
+      "cocatalyst": null,
+      "mediator_present": false,
+      "mediator": null,
+      "morphology": "3D pyramidal MoS2 on PbTiO3 nanoplates",
+      "interface_notes": "HRTEM shows a tightly connected MoS2/PbTiO3 interface."
+    },
+    "pair_id": "PAIR-0001",
+    "psk_fraction": 99.0,
+    "tmd_fraction": 1.0,
+    "fraction_basis": "weight_percent",
+    "is_reference_sample": false,
+    "notes": "Optimized composite used for detailed morphology and mechanism characterization."
+  },
+  {
+    "sample_id": "SMP-0003",
+    "paper_id": "PPR-0001",
+    "sample_name_reported": "2.5%-MoS2/PbTiO3",
+    "psk": {
+      "formula_reported": "PbTiO3",
+      "formula_normalized": "PbTiO3",
+      "parent_formula": "PbTiO3",
+      "a_site_elements": [
+        "Pb"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
+      "a_site_dopants": [],
+      "b_site_dopants": [],
+      "anion_site_dopants": [],
+      "phase_reported": "tetragonal perovskite",
+      "space_group_reported": null,
+      "morphology": "nanoplates",
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "tmd": {
+      "formula_reported": "MoS2",
+      "formula_normalized": "MoS2",
+      "parent_formula": "MoS2",
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
+      "m_site_dopants": [],
+      "x_site_dopants": [],
+      "phase_reported": null,
+      "layer_description": null,
+      "morphology": null,
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "heterostructure": {
+      "heterostructure_type_reported": "MoS2/PbTiO3 composite",
+      "component_ratio_reported": "2.5 wt% MoS2",
+      "interface_description": null,
+      "contact_type": null,
+      "preferred_facet_reported": null,
+      "cocatalyst_present": false,
+      "cocatalyst": null,
+      "mediator_present": false,
+      "mediator": null,
+      "morphology": null,
+      "interface_notes": null
+    },
+    "pair_id": "PAIR-0001",
+    "psk_fraction": 97.5,
+    "tmd_fraction": 2.5,
+    "fraction_basis": "weight_percent",
+    "is_reference_sample": false,
+    "notes": null
+  },
+  {
+    "sample_id": "SMP-0004",
+    "paper_id": "PPR-0001",
+    "sample_name_reported": "5%-MoS2/PbTiO3",
+    "psk": {
+      "formula_reported": "PbTiO3",
+      "formula_normalized": "PbTiO3",
+      "parent_formula": "PbTiO3",
+      "a_site_elements": [
+        "Pb"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
+      "a_site_dopants": [],
+      "b_site_dopants": [],
+      "anion_site_dopants": [],
+      "phase_reported": "tetragonal perovskite",
+      "space_group_reported": null,
+      "morphology": "nanoplates",
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "tmd": {
+      "formula_reported": "MoS2",
+      "formula_normalized": "MoS2",
+      "parent_formula": "MoS2",
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
+      "m_site_dopants": [],
+      "x_site_dopants": [],
+      "phase_reported": "hexagonal",
+      "layer_description": null,
+      "morphology": null,
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "heterostructure": {
+      "heterostructure_type_reported": "MoS2/PbTiO3 composite",
+      "component_ratio_reported": "5 wt% MoS2",
+      "interface_description": null,
+      "contact_type": null,
+      "preferred_facet_reported": null,
+      "cocatalyst_present": false,
+      "cocatalyst": null,
+      "mediator_present": false,
+      "mediator": null,
+      "morphology": null,
+      "interface_notes": null
+    },
+    "pair_id": "PAIR-0001",
+    "psk_fraction": 95.0,
+    "tmd_fraction": 5.0,
+    "fraction_basis": "weight_percent",
+    "is_reference_sample": false,
+    "notes": null
+  }
+]

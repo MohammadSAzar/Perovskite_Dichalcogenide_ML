@@ -1,0 +1,91 @@
+[
+  {
+    "evidence_id": "EVD-0001",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "pl",
+    "evidence_subtype": "steady-state photoluminescence",
+    "support": "supports",
+    "evidence_strength": "moderate",
+    "reported_result": "The PL emission intensity of 1%-MoS2/PbTiO3 is lower than that of PbTiO3, indicating reduced photogenerated electron-hole recombination.",
+    "source_location": "Section 4.2, Fig. 6a",
+    "notes": "Supports improved charge separation, but does not by itself distinguish S-scheme from other heterojunction mechanisms."
+  },
+  {
+    "evidence_id": "EVD-0002",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "photocurrent",
+    "evidence_subtype": "transient photocurrent response",
+    "support": "supports",
+    "evidence_strength": "moderate",
+    "reported_result": "1%-MoS2/PbTiO3 shows a stronger transient photocurrent response than PbTiO3, indicating higher photogenerated charge-separation efficiency.",
+    "source_location": "Section 4.2, Fig. 6b",
+    "notes": "Supports enhanced carrier separation, but is not mechanism-specific by itself."
+  },
+  {
+    "evidence_id": "EVD-0003",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "eis",
+    "evidence_subtype": "electrochemical impedance spectroscopy",
+    "support": "supports",
+    "evidence_strength": "moderate",
+    "reported_result": "The 1%-MoS2/PbTiO3 composite exhibits a smaller Nyquist arc radius than PbTiO3, indicating lower impedance and improved charge-transfer/separation behavior.",
+    "source_location": "Section 4.2, Fig. 6c",
+    "notes": "Supports improved interfacial charge transfer and reduced recombination, but is not mechanism-specific by itself."
+  },
+  {
+    "evidence_id": "EVD-0004",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "mott_schottky",
+    "evidence_subtype": "semiconductor type and flat-band interpretation",
+    "support": "supports",
+    "evidence_strength": "strong",
+    "reported_result": "PbTiO3 shows n-type behavior, while the inverse-V-shaped Mott-Schottky plot of 1%-MoS2/PbTiO3 is interpreted as evidence of p-n heterojunction formation and p-type behavior of MoS2 in the composite.",
+    "source_location": "Section 4.2, Fig. 6d-e",
+    "notes": "Contributes to the authors' proposed interface and charge-transfer picture."
+  },
+  {
+    "evidence_id": "EVD-0005",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "VB-XPS and calculated CB positions",
+    "support": "supports",
+    "evidence_strength": "strong",
+    "reported_result": "VB-XPS gives VB positions of 0.20 eV for MoS2 and 1.87 eV for PbTiO3. Combined with reported band gaps, CB positions are calculated as -1.65 eV for MoS2 and -1.20 eV for PbTiO3.",
+    "source_location": "Section 4.2, Fig. 6f",
+    "notes": "These band positions are later used directly in the Type-II versus S-scheme argument."
+  },
+  {
+    "evidence_id": "EVD-0006",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "radical_trapping",
+    "evidence_subtype": "reactive-species quenching",
+    "support": "supports",
+    "evidence_strength": "strong",
+    "reported_result": "Isopropyl alcohol strongly suppresses MB degradation and benzoquinone also inhibits degradation, indicating important roles for hydroxyl radicals and superoxide radicals.",
+    "source_location": "Section 4.3, Fig. 7c",
+    "notes": "The observed hydroxyl-radical formation is used by the authors to reject the proposed Type-II pathway."
+  },
+  {
+    "evidence_id": "EVD-0007",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "esr",
+    "evidence_subtype": "DMPO spin-trapping ESR",
+    "support": "supports",
+    "evidence_strength": "strong",
+    "reported_result": "No radical signal is detected before illumination, whereas DMPO-OH and DMPO-O2- signals appear after illumination.",
+    "source_location": "Section 4.3, Fig. 7a-b",
+    "notes": "Directly confirms generation of the reactive species used in the mechanism discrimination."
+  },
+  {
+    "evidence_id": "EVD-0008",
+    "mechanism_assessment_id": "MEA-0001",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "Type-II exclusion using radical-generation thermodynamics",
+    "support": "supports",
+    "evidence_strength": "strong",
+    "reported_result": "The authors state that under a Type-II pathway the holes would accumulate on the MoS2 valence band, whose potential is insufficient to generate hydroxyl radicals. Because hydroxyl radicals are experimentally observed, the Type-II pathway is rejected and an S-scheme pathway is proposed.",
+    "source_location": "Section 4.4, Scheme 2",
+    "notes": "This is the most mechanism-specific evidence in the paper because it explicitly connects experimental radical evidence with band energetics to discriminate between Type-II and S-scheme."
+  }
+]
+
