@@ -24,9 +24,11 @@ class ChargeTransferClass(str, Enum):
 
 
 class MechanismLabel(str, Enum):
+    TYPE_I = "type_i"
+    TYPE_II = "type_ii"
+    TYPE_III = "type_iii"
     Z_SCHEME = "z_scheme"
     S_SCHEME = "s_scheme"
-    TYPE_II = "type_ii"
     SCHOTTKY = "schottky"
     P_N = "p_n"
     OTHER = "other"
@@ -119,7 +121,9 @@ class EvidenceType(str, Enum):
     MOTT_SCHOTTKY = "mott_schottky"
     PHOTODEPOSITION = "photodeposition"
     PHOTOCURRENT = "photocurrent"
+    SPM = "spm"
     CV = "cv"
+    LSV = "lsv"
     EIS = "eis"
     DFT = "dft"
     BAND_ALIGNMENT = "band_alignment"

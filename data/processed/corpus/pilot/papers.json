@@ -18,5 +18,67 @@
     "full_text_available": true,
     "source_url": null,
     "retrieval_date": null
+  },
+  {
+    "paper_id": "PPR-0002",
+    "doi": "10.1007/s11581-019-03210-2",
+    "title": "High performance hydrogen production of MoS2-modified perovskite LaNiO3 under visible light",
+    "authors": [
+      "Min Mao",
+      "Jing Xu",
+      "Lingjiao Li",
+      "Sheng Zhao",
+      "Xuanhao Li",
+      "Yanru Li",
+      "Zeying Liu"
+    ],
+    "year": 2019,
+    "journal": "Ionics",
+    "publisher": "Springer Nature",
+    "document_type": null,
+    "access_type": "institutional_access",
+    "full_text_available": true,
+    "source_url": null,
+    "retrieval_date": null
+  },
+  {
+    "paper_id": "PPR-0003",
+    "doi": "10.1016/j.cej.2020.125721",
+    "title": "Construction of a Z-scheme MoS2/CaTiO3 heterostructure by the morphology-controlled strategy towards enhancing photocatalytic activity",
+    "authors": [
+      "Enhui Jiang",
+      "Ning Song",
+      "Guangbo Che",
+      "Chunbo Liu",
+      "Hongjun Dong",
+      "Lili Yang"
+    ],
+    "year": 2020,
+    "journal": "Chemical Engineering Journal",
+    "publisher": "Elsevier B.V.",
+    "document_type": null,
+    "access_type": "institutional_access",
+    "full_text_available": true,
+    "source_url": null,
+    "retrieval_date": null
+  },
+  {
+    "paper_id": "PPR-0004",
+    "doi": null,
+    "title": "The high photocatalytic efficiency and stability of the Z-scheme CaTiO3/WS2 heterostructure for photocatalytic removal of 17α-ethinyl estradiol in aqueous solution",
+    "authors": [
+      "Omolbanin Rashki",
+      "Mohammad Reza Rezaei",
+      "Mohammad Hossein Sayadi"
+    ],
+    "year": 2022,
+    "journal": "Journal of Photochemistry & Photobiology, A: Chemistry",
+    "publisher": "Elsevier B.V.",
+    "document_type": null,
+    "access_type": "institutional_access",
+    "full_text_available": true,
+    "source_url": null,
+    "retrieval_date": null
   }
 ]
+

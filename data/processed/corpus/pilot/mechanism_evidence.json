@@ -86,6 +86,226 @@
     "reported_result": "The authors state that under a Type-II pathway the holes would accumulate on the MoS2 valence band, whose potential is insufficient to generate hydroxyl radicals. Because hydroxyl radicals are experimentally observed, the Type-II pathway is rejected and an S-scheme pathway is proposed.",
     "source_location": "Section 4.4, Scheme 2",
     "notes": "This is the most mechanism-specific evidence in the paper because it explicitly connects experimental radical evidence with band energetics to discriminate between Type-II and S-scheme."
+  },
+  {
+    "evidence_id": "EVD-0009",
+    "mechanism_assessment_id": "MEA-0002",
+    "evidence_type": "pl",
+    "evidence_subtype": "steady-state and time-resolved fluorescence",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "The EY-MoS2/LaNiO3 system showed an average fluorescence lifetime of 0.323 ns, compared with 0.307 ns for EY-LaNiO3 and 0.177 ns for EY-MoS2. The authors interpreted the increased lifetime as evidence that MoS2 promotes electron transfer and inhibits electron-hole recombination.",
+    "source_location": "PL analysis; Fig. 7; Table 1",
+    "notes": "Supports improved charge transfer and reduced recombination in the composite, but is not sufficient by itself to identify a Type-I mechanism."
+  },
+  {
+    "evidence_id": "EVD-0010",
+    "mechanism_assessment_id": "MEA-0002",
+    "evidence_type": "photocurrent",
+    "evidence_subtype": "transient photocurrent response",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "MoS2/LaNiO3 exhibited a significantly enhanced photocurrent response compared with pure MoS2 and LaNiO3. The authors attributed this to promoted surface-charge transfer and reduced electron-hole recombination.",
+    "source_location": "Electrochemical analysis; Fig. 8a",
+    "notes": "Supports enhanced carrier separation and transfer, but is not mechanism-specific."
+  },
+  {
+    "evidence_id": "EVD-0011",
+    "mechanism_assessment_id": "MEA-0002",
+    "evidence_type": "lsv",
+    "evidence_subtype": "linear sweep voltammetry",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "The reduction current density increased from the blank and individual components toward the MoS2/LaNiO3 electrode. The authors interpreted this as evidence that the synergistic interaction between MoS2 and LaNiO3 favors electron transfer.",
+    "source_location": "Electrochemical analysis; Fig. 8b",
+    "notes": "Supports improved interfacial electron-transfer behavior, but does not independently establish the heterojunction type."
+  },
+  {
+    "evidence_id": "EVD-0012",
+    "mechanism_assessment_id": "MEA-0002",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "reported straddling alignment",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "The authors explicitly describe the MoS2/LaNiO3 heterojunction as having a straddling alignment and use this alignment to explain charge separation and transfer during visible-light hydrogen production.",
+    "source_location": "The hydrogen production mechanism section",
+    "notes": "Straddling-gap alignment is the principal textual evidence supporting normalization to a conventional Type-I heterojunction."
+  },
+  {
+    "evidence_id": "EVD-0013",
+    "mechanism_assessment_id": "MEA-0002",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "carrier-transfer mechanism diagram",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "Fig. 11 depicts the proposed MoS2/LaNiO3 hydrogen-production mechanism using the calculated band positions and carrier-transfer pathway. The diagram is consistent with the straddling alignment described in the accompanying text.",
+    "source_location": "Fig. 11 and accompanying hydrogen-production mechanism discussion",
+    "notes": "Primary figure-based evidence for the curator-assigned Type-I label. The article does not explicitly use the term Type-I, so the normalized mechanism remains claim_explicit=false."
+  },
+  {
+    "evidence_id": "EVD-0014",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "xps",
+    "evidence_subtype": "interfacial binding-energy shifts",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "In the MoS2/CaTiO3-1% heterostructure, the Ca 2p, Ti 2p and O 1s states shift toward higher binding energy relative to CaTiO3, while the Mo 3d and S 2p states shift toward lower binding energy relative to MoS2. The authors interpret this as electron migration from CaTiO3 to MoS2 and identify the pathway with a direct Z-scheme photocatalyst.",
+    "source_location": "Section 3.3; Fig. 3b-f",
+    "notes": "Mechanism-specific evidence because the direction of the interfacial XPS shifts is explicitly used by the authors to infer charge migration and support the direct Z-scheme assignment."
+  },
+  {
+    "evidence_id": "EVD-0015",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "mott_schottky",
+    "evidence_subtype": "flat-band and semiconductor-type determination",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "Both CaTiO3 and MoS2 show positive Mott-Schottky slopes and are treated as n-type semiconductors. Their conduction-band potentials are determined to be approximately -0.19 eV for CaTiO3 and -0.42 eV for MoS2 versus NHE.",
+    "source_location": "Section 3.5; Fig. 6c-d",
+    "notes": "Provides experimentally derived band-position information used in constructing the proposed Z-scheme transfer pathway."
+  },
+  {
+    "evidence_id": "EVD-0016",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "CB/VB position analysis",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "Using the measured band gaps and flat-band potentials, the authors assign CB/VB potentials of approximately -0.19/3.37 eV for CaTiO3 and -0.42/1.46 eV for MoS2 versus NHE. These positions are used to construct the proposed Z-scheme carrier-transfer pathway.",
+    "source_location": "Section 3.5; Fig. 6",
+    "notes": "Band positions alone do not prove Z-scheme behavior, but they are necessary supporting evidence when combined with XPS and radical-generation results."
+  },
+  {
+    "evidence_id": "EVD-0017",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "photocurrent",
+    "evidence_subtype": "transient photocurrent response",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "The MoS2/CaTiO3-1% heterostructure shows a higher transient photocurrent response than pure CaTiO3 and MoS2 over repeated irradiation cycles.",
+    "source_location": "Section 3.5; Fig. 7a",
+    "notes": "Supports improved separation and transport of photogenerated carriers, but does not independently identify the Z-scheme mechanism."
+  },
+  {
+    "evidence_id": "EVD-0018",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "eis",
+    "evidence_subtype": "Nyquist impedance response",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "The MoS2/CaTiO3-1% heterostructure exhibits a smaller Nyquist arc than pure CaTiO3 and MoS2, which the authors interpret as a lower charge-carrier recombination rate.",
+    "source_location": "Section 3.5; Fig. 7b",
+    "notes": "Supports improved interfacial charge-transfer behavior and reduced recombination, but is not mechanism-specific by itself."
+  },
+  {
+    "evidence_id": "EVD-0019",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "lsv",
+    "evidence_subtype": "linear sweep voltammetry",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "At a current density of -10 mA cm^-2, the MoS2/CaTiO3-1% heterostructure shows a smaller absolute overpotential than pure CaTiO3 and MoS2, which is interpreted as improved conductivity.",
+    "source_location": "Section 3.5; Fig. 7c",
+    "notes": "Supports favorable charge-transfer kinetics, but is not sufficient to distinguish Z-scheme from other heterojunction mechanisms."
+  },
+  {
+    "evidence_id": "EVD-0020",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "spm",
+    "evidence_subtype": "transient-state surface photovoltage",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "The MoS2/CaTiO3-1% heterostructure exhibits a higher transient surface photovoltage than pure CaTiO3 and MoS2 over six cycles.",
+    "source_location": "Section 3.5; Fig. 7d",
+    "notes": "Supports enhanced dissociation and separation of photogenerated charge carriers, but is not mechanism-specific by itself."
+  },
+  {
+    "evidence_id": "EVD-0021",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "esr",
+    "evidence_subtype": "DMPO-O2- and DMPO-OH radical detection",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "ESR measurements show formation of both superoxide and hydroxyl radicals under irradiation. The MoS2/CaTiO3-1% heterostructure exhibits stronger radical-response signals than the individual components.",
+    "source_location": "Section 3.5; Fig. 9a-b",
+    "notes": "The simultaneous generation of O2- and OH is consistent with retention of strong reduction and oxidation capability, supporting the proposed Z-scheme pathway when interpreted together with the measured band positions."
+  },
+  {
+    "evidence_id": "EVD-0022",
+    "mechanism_assessment_id": "MEA-0003",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "proposed direct Z-scheme carrier-transfer diagram",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "The proposed mechanism shows rapid interfacial recombination between electrons in the CaTiO3 conduction band and holes in the MoS2 valence band, leaving electrons in the MoS2 conduction band and holes in the CaTiO3 valence band for reduction and oxidation reactions.",
+    "source_location": "Section 3.5; Fig. 10a-b",
+    "notes": "Primary mechanism-specific schematic evidence. The selective interfacial recombination pathway distinguishes the proposed direct Z-scheme from conventional Type-II transfer."
+  },
+  {
+    "evidence_id": "EVD-0023",
+    "mechanism_assessment_id": "MEA-0004",
+    "evidence_type": "mott_schottky",
+    "evidence_subtype": "flat-band and semiconductor-type determination",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "Positive Mott-Schottky slopes were reported for both CaTiO3 and WS2, indicating n-type behavior. Flat-band potentials were approximately -0.39 V and -0.54 V versus Ag/AgCl for CaTiO3 and WS2, respectively. The authors converted these to conduction-band potentials of about -0.29 eV for CaTiO3 and -0.44 eV for WS2 versus NHE.",
+    "source_location": "Section 3.4; Mott-Schottky discussion",
+    "notes": "Provides the experimental band-position basis used later in the proposed photocatalytic mechanism. Band positions alone do not establish Z-scheme behavior."
+  },
+  {
+    "evidence_id": "EVD-0024",
+    "mechanism_assessment_id": "MEA-0004",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "CB/VB position analysis",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "The reported CB/VB potentials are approximately -0.44/1.38 eV for WS2 and -0.29/3.16 eV for CaTiO3 versus NHE. These values are used by the authors to discuss charge-transfer behavior and reactive-species generation.",
+    "source_location": "Sections 3.4 and 3.6",
+    "notes": "Supports construction of the proposed mechanism but does not independently distinguish Z-scheme from conventional Type-II transfer."
+  },
+  {
+    "evidence_id": "EVD-0025",
+    "mechanism_assessment_id": "MEA-0004",
+    "evidence_type": "pl",
+    "evidence_subtype": "steady-state photoluminescence",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "PL spectra of CaTiO3, WS2 and CaTiO3/WS2 were used to evaluate electron-hole recombination behavior.",
+    "source_location": "Section 3.4; PL discussion and Fig. 6e",
+    "notes": "The paper uses PL as charge-recombination evidence. The retrieved source text does not provide enough unambiguous numerical detail to encode a more specific quantitative statement here. PL is not mechanism-specific by itself."
+  },
+  {
+    "evidence_id": "EVD-0026",
+    "mechanism_assessment_id": "MEA-0004",
+    "evidence_type": "radical_trapping",
+    "evidence_subtype": "reactive-species scavenger tests",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "The degradation of EE2 was strongly inhibited when scavengers for superoxide radicals and holes were introduced, whereas t-BuOH had little influence. The authors conclude that superoxide radicals and holes are the dominant reactive species and hydroxyl radicals are not the principal species.",
+    "source_location": "Section 3.5; scavenger experiments",
+    "notes": "The persistence of strong reduction and oxidation species is consistent with the authors' Z-scheme interpretation, although scavenger evidence alone does not uniquely prove the mechanism."
+  },
+  {
+    "evidence_id": "EVD-0027",
+    "mechanism_assessment_id": "MEA-0004",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "proposed direct Z-scheme carrier-transfer diagram and reaction equations",
+    "support": "supports",
+    "strength": "strong",
+    "reported_result": "Fig. 7 and the accompanying reaction equations represent photogenerated carriers in both semiconductors followed by selective recombination that leaves electrons on WS2 and holes on CaTiO3. The remaining WS2 electrons reduce O2 to superoxide, while holes participate in EE2 degradation.",
+    "source_location": "Section 3.6; Fig. 7; Eqs. 1-4",
+    "notes": "This is the strongest mechanism-specific evidence in the paper and is consistent with the authors' explicit direct Z-scheme assignment."
+  },
+  {
+    "evidence_id": "EVD-0028",
+    "mechanism_assessment_id": "MEA-0004",
+    "evidence_type": "band_alignment",
+    "evidence_subtype": "textual carrier-transfer description",
+    "support": "supports",
+    "strength": "moderate",
+    "reported_result": "The mechanism prose discusses interfacial transfer of photogenerated carriers between WS2 and CaTiO3 as part of the proposed direct Z-scheme photocatalytic mechanism.",
+    "source_location": "Section 3.6 immediately before the reaction equations",
+    "notes": "The wording of the carrier-transfer sentence is not fully consistent with the subsequent equations and Fig. 7, but the authors explicitly assign a direct Z-scheme mechanism and the overall mechanism section supports that interpretation. The wording inconsistency is retained as a source-quality note rather than treated as ambiguity in the normalized mechanism label."
   }
 ]
 

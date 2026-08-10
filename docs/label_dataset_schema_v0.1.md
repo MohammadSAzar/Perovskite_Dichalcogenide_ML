@@ -239,7 +239,11 @@ This table separates what authors claim from the normalized mechanism and from t
 ### Existing `MechanismLabel` values
 - `z_scheme`
 - `s_scheme`
+- `type_i`
 - `type_ii`
+- `type_iii`
+- `schottky`
+- `p_n`
 - `other`
 - `unknown`
 
@@ -516,6 +520,4 @@ This document is **Schema v0.2**. During the pilot, schema changes should be exp
 - Added `tmd_parent_formula`, `tmd_m_site_dopants`, and `tmd_x_site_dopants`.
 - Explicitly prohibited collapsing doped TMDs to undoped parent compositions in Corpus, Materials, Mapping, Integrated Dataset, Feature Engineering, or ML stages.
 - Expanded the postponed TMD parser requirement to include multi-dopant M-site and X-site assignment.
-
-
 

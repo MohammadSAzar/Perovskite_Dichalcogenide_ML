@@ -46,11 +46,15 @@ def test_charge_transfer_class_values():
 
 
 def test_mechanism_label_values():
+    assert MechanismLabel.TYPE_I.value == "type_i"
+    assert MechanismLabel.TYPE_II.value == "type_ii"
+    assert MechanismLabel.TYPE_III.value == "type_iii"
     assert MechanismLabel.Z_SCHEME.value == "z_scheme"
     assert MechanismLabel.S_SCHEME.value == "s_scheme"
-    assert MechanismLabel.TYPE_II.value == "type_ii"
     assert MechanismLabel.SCHOTTKY.value == "schottky"
     assert MechanismLabel.P_N.value == "p_n"
+    assert MechanismLabel.OTHER.value == "other"
+    assert MechanismLabel.UNKNOWN.value == "unknown"
 
 
 # ---------------------------------------------------------------------------
@@ -112,8 +116,10 @@ def test_evidence_type_values():
     assert EvidenceType.MOTT_SCHOTTKY.value == "mott_schottky"
     assert EvidenceType.PHOTODEPOSITION.value == "photodeposition"
     assert EvidenceType.PHOTOCURRENT.value == "photocurrent"
+    assert EvidenceType.SPM.value == "spm"
     assert EvidenceType.EIS.value == "eis"
     assert EvidenceType.CV.value == "cv"
+    assert EvidenceType.LSV.value == "lsv"
     assert EvidenceType.DFT.value == "dft"
     assert EvidenceType.BAND_ALIGNMENT.value == "band_alignment"
     assert EvidenceType.WORK_FUNCTION.value == "work_function"
