@@ -158,7 +158,7 @@ class MechanismAssessment(BaseModel):
 
     mechanism_reported: str | None = None
     mechanism_normalized: MechanismLabel = MechanismLabel.UNKNOWN
-    charge_transfer_class: ChargeTransferClass = ChargeTransferClass.UNKNOWN
+    charge_transfer_class: ChargeTransferClass | None = None
 
     claim_explicit: bool | None = None
     assessment_confidence: float | None = Field(

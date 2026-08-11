@@ -15,14 +15,8 @@ class DataSource(str, Enum):
 
 
 # ---------------------------------------------------------------------------
-# CHARGE-TRANSFER LABELS
+# DETAILED MECHANISM LABEL
 # ---------------------------------------------------------------------------
-class ChargeTransferClass(str, Enum):
-    MEDIATED_RECOMBINATION = "mediated_recombination"
-    NON_MEDIATED_RECOMBINATION = "non_mediated_recombination"
-    UNKNOWN = "unknown"
-
-
 class MechanismLabel(str, Enum):
     TYPE_I = "type_i"
     TYPE_II = "type_ii"
@@ -33,6 +27,18 @@ class MechanismLabel(str, Enum):
     P_N = "p_n"
     OTHER = "other"
     UNKNOWN = "unknown"
+
+
+# ---------------------------------------------------------------------------
+# ML CHARGE-TRANSFER CLASS
+# ---------------------------------------------------------------------------
+class ChargeTransferClass(str, Enum):
+    MEDIATED_RECOMBINATION = "mediated_recombination"
+    TYPE_I = "type_i"
+    TYPE_II = "type_ii"
+    TYPE_III = "type_iii"
+    PN = "pn"
+    SCHOTTKY = "schottky"
 
 
 # ---------------------------------------------------------------------------
@@ -162,6 +168,17 @@ class ExtractorType(str, Enum):
     UNKNOWN = "unknown"
 
 
+class ProvenanceOperation(str, Enum):
+    DIRECT_EXTRACTION = "direct_extraction"
+    UNIT_NORMALIZATION = "unit_normalization"
+    SEMANTIC_NORMALIZATION = "semantic_normalization"
+    ONTOLOGY_MAPPING = "ontology_mapping"
+    DERIVED_CALCULATION = "derived_calculation"
+    CONFLICT_RESOLUTION = "conflict_resolution"
+    OTHER = "other"
+    UNKNOWN = "unknown"
+
+
 # ---------------------------------------------------------------------------
 # MATERIAL MAPPING
 # ---------------------------------------------------------------------------
@@ -172,4 +189,20 @@ class MappingStatus(str, Enum):
     AMBIGUOUS = "ambiguous"
     UNRESOLVED = "unresolved"
     NO_MATCH = "no_match"
+
+
+# ---------------------------------------------------------------------------
+# DISAGREEMENT TYPE & STATUS
+# ---------------------------------------------------------------------------
+class DisagreementType(str, Enum):
+    WITHIN_PAPER = "within_paper"
+    BETWEEN_PAPERS = "between_papers"
+    OTHER = "other"
+
+
+class DisagreementStatus(str, Enum):
+    UNRESOLVED = "unresolved"
+    CURATOR_RESOLVED = "curator_resolved"
+    SOURCE_ERROR = "source_error"
+
 

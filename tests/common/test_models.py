@@ -267,7 +267,7 @@ def test_mechanism_assessment_does_not_auto_map_label():
         mechanism_normalized=MechanismLabel.Z_SCHEME,
     )
 
-    assert assessment.charge_transfer_class == ChargeTransferClass.UNKNOWN
+    assert assessment.charge_transfer_class is None
 
 
 # ---------------------------------------------------------------------------

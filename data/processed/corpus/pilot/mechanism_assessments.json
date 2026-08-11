@@ -16,7 +16,7 @@
     "sample_id": "SMP-0007",
     "mechanism_reported": "heterojunction charge-transfer mechanism illustrated in Fig. 11",
     "mechanism_normalized": "type_i",
-    "charge_transfer_class": "non_mediated_recombination",
+    "charge_transfer_class": "type_i",
     "claim_explicit": false,
     "confidence": null,
     "manual_review_status": "reviewed",

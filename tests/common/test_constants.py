@@ -15,6 +15,9 @@ from psk_tmd.common.constants import (
     PhotocatalyticApplication,
     SynthesisStepRole,
     SynthesisTopology,
+    ProvenanceOperation,
+    DisagreementType,
+    DisagreementStatus,
 )
 
 
@@ -39,10 +42,11 @@ def test_charge_transfer_class_values():
         ChargeTransferClass.MEDIATED_RECOMBINATION.value
         == "mediated_recombination"
     )
-    assert (
-        ChargeTransferClass.NON_MEDIATED_RECOMBINATION.value
-        == "non_mediated_recombination"
-    )
+    assert ChargeTransferClass.TYPE_I.value == "type_i"
+    assert ChargeTransferClass.TYPE_II.value == "type_ii"
+    assert ChargeTransferClass.TYPE_III.value == "type_iii"
+    assert ChargeTransferClass.PN.value == "pn"
+    assert ChargeTransferClass.SCHOTTKY.value == "schottky"
 
 
 def test_mechanism_label_values():
@@ -158,4 +162,55 @@ def test_mapping_status_values():
     assert MappingStatus.EXACT.value == "exact"
     assert MappingStatus.AMBIGUOUS.value == "ambiguous"
     assert MappingStatus.NO_MATCH.value == "no_match"
+
+
+# ---------------------------------------------------------------------------
+# PROVENANCE OPERATION
+# ---------------------------------------------------------------------------
+def test_provenance_operation_values():
+    assert (
+        ProvenanceOperation.DIRECT_EXTRACTION.value
+        == "direct_extraction"
+    )
+    assert (
+        ProvenanceOperation.UNIT_NORMALIZATION.value
+        == "unit_normalization"
+    )
+    assert (
+        ProvenanceOperation.SEMANTIC_NORMALIZATION.value
+        == "semantic_normalization"
+    )
+    assert (
+        ProvenanceOperation.ONTOLOGY_MAPPING.value
+        == "ontology_mapping"
+    )
+    assert (
+        ProvenanceOperation.DERIVED_CALCULATION.value
+        == "derived_calculation"
+    )
+    assert (
+        ProvenanceOperation.CONFLICT_RESOLUTION.value
+        == "conflict_resolution"
+    )
+    assert ProvenanceOperation.OTHER.value == "other"
+    assert ProvenanceOperation.UNKNOWN.value == "unknown"
+
+
+# ---------------------------------------------------------------------------
+# DISAGREEMENT VALUES
+# ---------------------------------------------------------------------------
+def test_disagreement_type_values():
+    assert DisagreementType.WITHIN_PAPER.value == "within_paper"
+    assert DisagreementType.BETWEEN_PAPERS.value == "between_papers"
+    assert DisagreementType.OTHER.value == "other"
+
+
+def test_disagreement_status_values():
+    assert DisagreementStatus.UNRESOLVED.value == "unresolved"
+    assert (
+        DisagreementStatus.CURATOR_RESOLVED.value
+        == "curator_resolved"
+    )
+    assert DisagreementStatus.SOURCE_ERROR.value == "source_error"
+
 

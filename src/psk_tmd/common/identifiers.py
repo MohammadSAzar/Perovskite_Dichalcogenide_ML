@@ -4,9 +4,16 @@ from enum import Enum
 class EntityPrefix(str, Enum):
     PAPER = "PPR"
     SAMPLE = "SMP"
+    SAMPLE_SERIES = "SER"
     COMPOSITION = "CMP"
     PAIR = "PAIR"
     STRUCTURE = "STR"
+    SYNTHESIS = "SYN"
+    MECHANISM_ASSESSMENT = "MEA"
+    MECHANISM_EVIDENCE = "EVD"
+    PHOTOCATALYTIC_TEST = "TST"
+    EXTRACTION = "EXT"
+    DISAGREEMENT = "DSG"
     MAPPING = "MAP"
 
 
@@ -44,5 +51,4 @@ def make_sequential_id(
         raise ValueError("Identifier width must be >= 1.")
 
     return f"{prefix.value}-{number:0{width}d}"
-
 

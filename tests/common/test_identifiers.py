@@ -6,6 +6,37 @@ from psk_tmd.common.identifiers import (
 )
 
 
+# ---------------------------------------------------------------------------
+# ENTITY PREFIX
+# ---------------------------------------------------------------------------
+def test_entity_prefix_values():
+    assert EntityPrefix.PAPER.value == "PPR"
+    assert EntityPrefix.SAMPLE.value == "SMP"
+    assert EntityPrefix.SAMPLE_SERIES.value == "SER"
+    assert EntityPrefix.COMPOSITION.value == "CMP"
+    assert EntityPrefix.PAIR.value == "PAIR"
+    assert EntityPrefix.STRUCTURE.value == "STR"
+    assert EntityPrefix.SYNTHESIS.value == "SYN"
+    assert (
+        EntityPrefix.MECHANISM_ASSESSMENT.value
+        == "MEA"
+    )
+    assert (
+        EntityPrefix.MECHANISM_EVIDENCE.value
+        == "EVD"
+    )
+    assert (
+        EntityPrefix.PHOTOCATALYTIC_TEST.value
+        == "TST"
+    )
+    assert EntityPrefix.EXTRACTION.value == "EXT"
+    assert EntityPrefix.DISAGREEMENT.value == "DSG"
+    assert EntityPrefix.MAPPING.value == "MAP"
+
+
+# ---------------------------------------------------------------------------
+# SEQUENTIAL ID
+# ---------------------------------------------------------------------------
 def test_make_sample_id():
     result = make_sequential_id(
         EntityPrefix.SAMPLE,
@@ -49,4 +80,5 @@ def test_invalid_width_raises_error():
             1,
             width=0,
         )
+
 
