@@ -13,7 +13,6 @@ from psk_tmd.common.constants import (
     MaterialType,
     MechanismLabel,
     PhotocatalyticApplication,
-    SynthesisStepRole,
     SynthesisTopology,
     ProvenanceOperation,
     DisagreementType,
@@ -77,12 +76,6 @@ def test_fraction_basis_values():
 # ---------------------------------------------------------------------------
 # SYNTHESIS
 # ---------------------------------------------------------------------------
-def test_synthesis_step_role_values():
-    assert SynthesisStepRole.PSK.value == "psk"
-    assert SynthesisStepRole.TMD.value == "tmd"
-    assert SynthesisStepRole.INTEGRATION.value == "integration"
-
-
 def test_synthesis_topology_values():
     assert SynthesisTopology.THREE_STAGE.value == "three_stage"
     assert SynthesisTopology.ONE_POT.value == "one_pot"
@@ -212,5 +205,4 @@ def test_disagreement_status_values():
         == "curator_resolved"
     )
     assert DisagreementStatus.SOURCE_ERROR.value == "source_error"
-
 

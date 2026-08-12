@@ -69,15 +69,6 @@ class FractionBasis(str, Enum):
 # ---------------------------------------------------------------------------
 # SYNTHESIS
 # ---------------------------------------------------------------------------
-class SynthesisStepRole(str, Enum):
-    PSK = "psk"
-    TMD = "tmd"
-    INTEGRATION = "integration"
-    SIMULTANEOUS = "simultaneous"
-    OTHER = "other"
-    UNKNOWN = "unknown"
-
-
 class SynthesisTopology(str, Enum):
     THREE_STAGE = "three_stage"
     PSK_FIRST_TWO_STAGE = "psk_first_two_stage"
@@ -204,5 +195,4 @@ class DisagreementStatus(str, Enum):
     UNRESOLVED = "unresolved"
     CURATOR_RESOLVED = "curator_resolved"
     SOURCE_ERROR = "source_error"
-
 
