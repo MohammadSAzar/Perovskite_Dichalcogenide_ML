@@ -6,15 +6,16 @@ from typing import TypeVar
 from pydantic import BaseModel
 
 from psk_tmd.common.models import (
+    DisagreementRecord,
     ExperimentalSample,
     ExtractionRecord,
     MechanismAssessment,
     MechanismEvidence,
     PaperRecord,
     PhotocatalyticTest,
-    SynthesisStep,
+    SampleSeries,
+    SynthesisRecord,
 )
-
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -24,12 +25,14 @@ ModelT = TypeVar("ModelT", bound=BaseModel)
 # ---------------------------------------------------------------------------
 PILOT_TABLE_MODELS: dict[str, type[BaseModel]] = {
     "papers.json": PaperRecord,
+    "sample_series.json": SampleSeries,
     "samples.json": ExperimentalSample,
-    "synthesis_steps.json": SynthesisStep,
+    "synthesis_records.json": SynthesisRecord,
     "mechanism_assessments.json": MechanismAssessment,
     "mechanism_evidence.json": MechanismEvidence,
     "photocatalytic_tests.json": PhotocatalyticTest,
     "extraction_records.json": ExtractionRecord,
+    "disagreement_records.json": DisagreementRecord,
 }
 
 
@@ -38,12 +41,14 @@ PILOT_TABLE_MODELS: dict[str, type[BaseModel]] = {
 # ---------------------------------------------------------------------------
 PILOT_TABLE_ID_FIELDS: dict[str, str] = {
     "papers": "paper_id",
+    "sample_series": "sample_series_id",
     "samples": "sample_id",
-    "synthesis_steps": "synthesis_step_id",
+    "synthesis_records": "synthesis_id",
     "mechanism_assessments": "mechanism_assessment_id",
     "mechanism_evidence": "evidence_id",
     "photocatalytic_tests": "test_id",
     "extraction_records": "extraction_id",
+    "disagreement_records": "disagreement_id",
 }
 
 
@@ -51,9 +56,9 @@ PILOT_TABLE_ID_FIELDS: dict[str, str] = {
 # SAVE MODELS
 # ---------------------------------------------------------------------------
 def save_model_list(
-        models: list[ModelT],
-        path: str | Path,
-    ) -> None:
+    models: list[ModelT],
+    path: str | Path,
+) -> None:
     output_path = Path(path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -72,9 +77,9 @@ def save_model_list(
 # LOAD MODELS
 # ---------------------------------------------------------------------------
 def load_model_list(
-        path: str | Path,
-        model_class: type[ModelT],
-    ) -> list[ModelT]:
+    path: str | Path,
+    model_class: type[ModelT],
+) -> list[ModelT]:
     input_path = Path(path)
 
     with input_path.open("r", encoding="utf-8") as file:
@@ -96,8 +101,8 @@ def load_model_list(
 # VALIDATE PILOT DIRECTORY
 # ---------------------------------------------------------------------------
 def validate_pilot_directory(
-        directory: str | Path,
-    ) -> dict[str, int]:
+    directory: str | Path,
+) -> dict[str, int]:
     pilot_directory = Path(directory)
 
     if not pilot_directory.exists():
@@ -134,8 +139,8 @@ def validate_pilot_directory(
 # LOAD PILOT TABLES
 # ---------------------------------------------------------------------------
 def load_pilot_tables(
-        directory: str | Path,
-    ) -> dict[str, list[BaseModel]]:
+    directory: str | Path,
+) -> dict[str, list[BaseModel]]:
     pilot_directory = Path(directory)
 
     tables: dict[str, list[BaseModel]] = {}
@@ -155,9 +160,9 @@ def load_pilot_tables(
 # RECORD IDS
 # ---------------------------------------------------------------------------
 def get_record_ids(
-        records: list[BaseModel],
-        id_field: str,
-    ) -> set[str]:
+    records: list[BaseModel],
+    id_field: str,
+) -> set[str]:
     return {
         getattr(record, id_field)
         for record in records
@@ -168,13 +173,13 @@ def get_record_ids(
 # REQUIRE FOREIGN KEY
 # ---------------------------------------------------------------------------
 def require_foreign_key(
-        value: str,
-        valid_ids: set[str],
-        *,
-        table_name: str,
-        record_id: str,
-        field_name: str,
-    ) -> None:
+    value: str,
+    valid_ids: set[str],
+    *,
+    table_name: str,
+    record_id: str,
+    field_name: str,
+) -> None:
     if value not in valid_ids:
         raise ValueError(
             f"Invalid foreign key in {table_name}: "
@@ -187,13 +192,18 @@ def require_foreign_key(
 # VALIDATE PILOT RELATIONSHIPS
 # ---------------------------------------------------------------------------
 def validate_pilot_relationships(
-        directory: str | Path,
-    ) -> None:
+    directory: str | Path,
+) -> None:
     tables = load_pilot_tables(directory)
 
     paper_ids = get_record_ids(
         tables["papers"],
         "paper_id",
+    )
+
+    sample_series_ids = get_record_ids(
+        tables["sample_series"],
+        "sample_series_id",
     )
 
     sample_ids = get_record_ids(
@@ -206,6 +216,15 @@ def validate_pilot_relationships(
         "mechanism_assessment_id",
     )
 
+    for series in tables["sample_series"]:
+        require_foreign_key(
+            series.paper_id,
+            paper_ids,
+            table_name="sample_series",
+            record_id=series.sample_series_id,
+            field_name="paper_id",
+        )
+
     for sample in tables["samples"]:
         require_foreign_key(
             sample.paper_id,
@@ -215,12 +234,21 @@ def validate_pilot_relationships(
             field_name="paper_id",
         )
 
-    for step in tables["synthesis_steps"]:
+        if sample.sample_series_id is not None:
+            require_foreign_key(
+                sample.sample_series_id,
+                sample_series_ids,
+                table_name="samples",
+                record_id=sample.sample_id,
+                field_name="sample_series_id",
+            )
+
+    for synthesis in tables["synthesis_records"]:
         require_foreign_key(
-            step.sample_id,
+            synthesis.sample_id,
             sample_ids,
-            table_name="synthesis_steps",
-            record_id=step.synthesis_step_id,
+            table_name="synthesis_records",
+            record_id=synthesis.synthesis_id,
             field_name="sample_id",
         )
 
@@ -232,6 +260,15 @@ def validate_pilot_relationships(
             record_id=assessment.mechanism_assessment_id,
             field_name="sample_id",
         )
+
+        if assessment.applies_to_series_id is not None:
+            require_foreign_key(
+                assessment.applies_to_series_id,
+                sample_series_ids,
+                table_name="mechanism_assessments",
+                record_id=assessment.mechanism_assessment_id,
+                field_name="applies_to_series_id",
+            )
 
     for evidence in tables["mechanism_evidence"]:
         require_foreign_key(
@@ -293,4 +330,44 @@ def validate_pilot_relationships(
             record_id=extraction.extraction_id,
             field_name="target_record_id",
         )
+
+    for disagreement in tables["disagreement_records"]:
+        for paper_id in disagreement.paper_ids:
+            require_foreign_key(
+                paper_id,
+                paper_ids,
+                table_name="disagreement_records",
+                record_id=disagreement.disagreement_id,
+                field_name="paper_ids",
+            )
+
+        if disagreement.target_table is None:
+            continue
+
+        if disagreement.target_table not in PILOT_TABLE_ID_FIELDS:
+            raise ValueError(
+                f"{disagreement.disagreement_id} references unknown "
+                f"target_table {disagreement.target_table!r}."
+            )
+
+        target_records = tables[disagreement.target_table]
+
+        target_id_field = PILOT_TABLE_ID_FIELDS[
+            disagreement.target_table
+        ]
+
+        target_ids = get_record_ids(
+            target_records,
+            target_id_field,
+        )
+
+        for target_record_id in disagreement.target_record_ids:
+            require_foreign_key(
+                target_record_id,
+                target_ids,
+                table_name="disagreement_records",
+                record_id=disagreement.disagreement_id,
+                field_name="target_record_ids",
+            )
+
 

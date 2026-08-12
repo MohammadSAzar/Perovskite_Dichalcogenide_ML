@@ -1,0 +1,64 @@
+[
+  {
+    "disagreement_id": "DSG-0001",
+    "disagreement_type": "within_paper",
+    "status": "curator_resolved",
+    "paper_ids": [
+      "PPR-0004"
+    ],
+    "target_table": "photocatalytic_tests",
+    "target_record_ids": [
+      "TST-0009"
+    ],
+    "target_field": "performance_metric_value",
+    "reported_values": [
+      "more than 96%",
+      "91.12%"
+    ],
+    "selected_value": "91.12%",
+    "description": "The abstract reports more than 96% EE2 removal, while the detailed results report 91.12%.",
+    "resolution_notes": "The detailed results value of 91.12% is used in the structured photocatalytic-test record."
+  },
+  {
+    "disagreement_id": "DSG-0002",
+    "disagreement_type": "within_paper",
+    "status": "curator_resolved",
+    "paper_ids": [
+      "PPR-0004"
+    ],
+    "target_table": "samples",
+    "target_record_ids": [
+      "SMP-0014",
+      "SMP-0015",
+      "SMP-0016"
+    ],
+    "target_field": "heterostructure.component_ratio_reported",
+    "reported_values": [
+      "1:1 CaTiO3/WS2 mixing ratio",
+      "10 wt%, 20 wt%, and 30 wt% CaTiO3 sample series"
+    ],
+    "selected_value": "10 wt%, 20 wt%, and 30 wt% CaTiO3 sample labels",
+    "description": "The synthesis section contains a 1:1 mixing statement that conflicts with the reported 10/20/30 wt% sample series.",
+    "resolution_notes": "The explicit sample labels and later performance/mechanism discussion are used for normalized compositions."
+  },
+  {
+    "disagreement_id": "DSG-0003",
+    "disagreement_type": "within_paper",
+    "status": "source_error",
+    "paper_ids": [
+      "PPR-0004"
+    ],
+    "target_table": "mechanism_assessments",
+    "target_record_ids": [
+      "MEA-0004"
+    ],
+    "target_field": "mechanism_reported",
+    "reported_values": [
+      "direct Z-scheme CaTiO3/WS2 heterostructure",
+      "LaNiO3/g-C3N4"
+    ],
+    "selected_value": "direct Z-scheme CaTiO3/WS2 heterostructure",
+    "description": "The abstract contains an unrelated LaNiO3/g-C3N4 phrase inconsistent with the CaTiO3/WS2 study.",
+    "resolution_notes": "The unrelated phrase is treated as a source-text error and is not propagated into the normalized mechanism label."
+  }
+]

@@ -11,9 +11,13 @@ from psk_tmd.common.constants import (
     LabelStatus,
     MechanismLabel,
     PhotocatalyticApplication,
-    SynthesisStepRole,
     ExtractorType,
+    DisagreementStatus,
+    DisagreementType,
+    ProvenanceOperation,
+    SynthesisTopology,
 )
+
 from psk_tmd.common.models import (
     ExperimentalSample,
     ExtractionRecord,
@@ -23,8 +27,10 @@ from psk_tmd.common.models import (
     PaperRecord,
     PhotocatalyticTest,
     PSKDescription,
-    SynthesisStep,
+    SynthesisRecord,
     TMDDescription,
+    DisagreementRecord,
+    SampleSeries,
 )
 
 
@@ -193,40 +199,76 @@ def test_experimental_sample_rejects_negative_fraction():
 
 
 # ---------------------------------------------------------------------------
-# SYNTHESIS
+# SAMPLE SERIES
 # ---------------------------------------------------------------------------
-def test_synthesis_step_valid():
-    step = SynthesisStep(
-        synthesis_step_id="SYN-000001",
-        sample_id="SMP-000001",
-        step_order=1,
-        step_role=SynthesisStepRole.PSK,
-        method="sol-gel",
-        temperature_c=80,
-        time_h=4,
+def test_valid_sample_series():
+    series = SampleSeries(
+        sample_series_id="SER-000001",
+        paper_id="PPR-000001",
+        pair_id="PAIR-000001",
+        series_name_reported="MoS2/CaTiO3 loading series",
     )
 
-    assert step.step_order == 1
-    assert step.method == "sol-gel"
+    assert series.sample_series_id == "SER-000001"
+    assert series.paper_id == "PPR-000001"
+    assert series.pair_id == "PAIR-000001"
 
 
-def test_synthesis_step_rejects_zero_step_order():
-    with pytest.raises(ValidationError):
-        SynthesisStep(
-            synthesis_step_id="SYN-000001",
-            sample_id="SMP-000001",
-            step_order=0,
-        )
+def test_experimental_sample_can_belong_to_series():
+    sample = ExperimentalSample(
+        sample_id="SMP-000001",
+        paper_id="PPR-000001",
+        sample_series_id="SER-000001",
+        psk=PSKDescription(
+            formula_reported="CaTiO3",
+        ),
+        tmd=TMDDescription(
+            formula_reported="MoS2",
+        ),
+    )
+
+    assert sample.sample_series_id == "SER-000001"
 
 
-def test_synthesis_step_rejects_negative_time():
-    with pytest.raises(ValidationError):
-        SynthesisStep(
-            synthesis_step_id="SYN-000001",
-            sample_id="SMP-000001",
-            step_order=1,
-            time_h=-2,
-        )
+def test_mechanism_assessment_can_apply_to_series():
+    assessment = MechanismAssessment(
+        mechanism_assessment_id="MEA-000001",
+        sample_id="SMP-000001",
+        applies_to_series_id="SER-000001",
+        mechanism_normalized=MechanismLabel.Z_SCHEME,
+        charge_transfer_class=(
+            ChargeTransferClass.MEDIATED_RECOMBINATION
+        ),
+    )
+
+    assert assessment.sample_id == "SMP-000001"
+    assert assessment.applies_to_series_id == "SER-000001"
+
+
+# ---------------------------------------------------------------------------
+# SYNTHESIS
+# ---------------------------------------------------------------------------
+def test_valid_synthesis_record():
+    record = SynthesisRecord(
+        synthesis_id="SYN-000001",
+        sample_id="SMP-000001",
+        topology=SynthesisTopology.PSK_FIRST_TWO_STAGE,
+        method_reported="in-situ hydrothermal",
+    )
+
+    assert record.synthesis_id == "SYN-000001"
+    assert record.sample_id == "SMP-000001"
+    assert record.topology == SynthesisTopology.PSK_FIRST_TWO_STAGE
+    assert record.method_reported == "in-situ hydrothermal"
+
+
+def test_synthesis_record_defaults_to_unknown_topology():
+    record = SynthesisRecord(
+        synthesis_id="SYN-000001",
+        sample_id="SMP-000001",
+    )
+
+    assert record.topology == SynthesisTopology.UNKNOWN
 
 
 # ---------------------------------------------------------------------------
@@ -298,6 +340,15 @@ def test_general_photocatalytic_test_valid():
         application_type=PhotocatalyticApplication.DYE_DEGRADATION,
         reaction_type="photocatalytic degradation",
         target_species="methylene blue",
+        initial_target_concentration_value=10.0,
+        initial_target_concentration_unit="mg/L",
+        light_source="500 W Xe lamp",
+        light_intensity_value=30000.0,
+        light_intensity_unit="lux",
+        catalyst_mass_mg=100.0,
+        solution_volume_ml=100.0,
+        dark_equilibration_time_min=30.0,
+        test_duration_h=2.0,
         performance_metric_name="degradation efficiency",
         performance_metric_value=92.5,
         performance_metric_unit="%",
@@ -308,6 +359,11 @@ def test_general_photocatalytic_test_valid():
         == PhotocatalyticApplication.DYE_DEGRADATION
     )
     assert test.target_species == "methylene blue"
+    assert test.initial_target_concentration_value == 10.0
+    assert test.initial_target_concentration_unit == "mg/L"
+    assert test.light_intensity_value == 30000.0
+    assert test.light_intensity_unit == "lux"
+    assert test.dark_equilibration_time_min == 30.0
     assert test.performance_metric_value == 92.5
 
 
@@ -316,20 +372,75 @@ def test_hydrogen_evolution_test_valid():
         test_id="TST-000002",
         sample_id="SMP-000001",
         application_type=PhotocatalyticApplication.HYDROGEN_EVOLUTION,
-        hydrogen_rate_reported_value=1250,
-        hydrogen_rate_reported_unit="umol g-1 h-1",
-        hydrogen_rate_standardized_umol_g_h=1250,
+        reaction_type="photocatalytic hydrogen evolution",
+        target_species="H2",
+        performance_metric_name="hydrogen evolution rate",
+        performance_metric_value=1250.0,
+        performance_metric_unit="umol g-1 h-1",
     )
 
-    assert test.hydrogen_rate_standardized_umol_g_h == 1250
+    assert (
+        test.application_type
+        == PhotocatalyticApplication.HYDROGEN_EVOLUTION
+    )
+    assert test.target_species == "H2"
+    assert test.performance_metric_name == "hydrogen evolution rate"
+    assert test.performance_metric_value == 1250.0
+    assert test.performance_metric_unit == "umol g-1 h-1"
 
 
-def test_photocatalytic_test_rejects_negative_hydrogen_rate():
+def test_photocatalytic_test_accepts_wavelength_cutoff():
+    test = PhotocatalyticTest(
+        test_id="TST-000003",
+        sample_id="SMP-000001",
+        wavelength_min_nm=420.0,
+        visible_light_only=True,
+    )
+
+    assert test.wavelength_nm is None
+    assert test.wavelength_min_nm == 420.0
+    assert test.wavelength_max_nm is None
+    assert test.visible_light_only is True
+
+
+def test_photocatalytic_test_accepts_cycle_performance():
+    test = PhotocatalyticTest(
+        test_id="TST-000004",
+        sample_id="SMP-000001",
+        cycles=5,
+        first_cycle_performance=91.12,
+        last_cycle_performance=88.5,
+    )
+
+    assert test.cycles == 5
+    assert test.first_cycle_performance == 91.12
+    assert test.last_cycle_performance == 88.5
+
+
+def test_photocatalytic_test_rejects_negative_concentration():
     with pytest.raises(ValidationError):
         PhotocatalyticTest(
             test_id="TST-000001",
             sample_id="SMP-000001",
-            hydrogen_rate_standardized_umol_g_h=-1,
+            initial_target_concentration_value=-1.0,
+        )
+
+
+def test_photocatalytic_test_rejects_negative_light_intensity():
+    with pytest.raises(ValidationError):
+        PhotocatalyticTest(
+            test_id="TST-000001",
+            sample_id="SMP-000001",
+            light_intensity_value=-1.0,
+        )
+
+
+def test_photocatalytic_test_rejects_zero_cycles():
+    with pytest.raises(ValidationError):
+        PhotocatalyticTest(
+            test_id="TST-000001",
+            sample_id="SMP-000001",
+            cycles=0,
         )
 
 
@@ -365,4 +476,66 @@ def test_extraction_record_rejects_invalid_confidence():
             confidence=-0.1,
         )
 
+
+# ---------------------------------------------------------------------------
+# EXTRACTION RECORD
+# ---------------------------------------------------------------------------
+def test_extraction_record_defaults_to_unknown_provenance_operation():
+    record = ExtractionRecord(
+        extraction_id="EXT-000001",
+        paper_id="PPR-000001",
+    )
+
+    assert (
+        record.provenance_operation
+        == ProvenanceOperation.UNKNOWN
+    )
+
+
+def test_extraction_record_accepts_provenance_operation():
+    record = ExtractionRecord(
+        extraction_id="EXT-000001",
+        paper_id="PPR-000001",
+        provenance_operation=ProvenanceOperation.UNIT_NORMALIZATION,
+        raw_value="120 min",
+        normalized_value="2.0 h",
+    )
+
+    assert (
+        record.provenance_operation
+        == ProvenanceOperation.UNIT_NORMALIZATION
+    )
+
+
+# ---------------------------------------------------------------------------
+# DISAGREEMENT RECORD
+# ---------------------------------------------------------------------------
+def test_valid_disagreement_record():
+    record = DisagreementRecord(
+        disagreement_id="DSG-000001",
+        disagreement_type=DisagreementType.WITHIN_PAPER,
+        status=DisagreementStatus.CURATOR_RESOLVED,
+        paper_ids=["PPR-000004"],
+        target_table="photocatalytic_tests",
+        target_record_ids=["TST-000009"],
+        target_field="performance_metric_value",
+        reported_values=[
+            "more than 96%",
+            "91.12%",
+        ],
+        selected_value="91.12%",
+    )
+
+    assert record.disagreement_type == DisagreementType.WITHIN_PAPER
+    assert record.status == DisagreementStatus.CURATOR_RESOLVED
+    assert record.selected_value == "91.12%"
+
+
+def test_disagreement_record_requires_reported_value():
+    with pytest.raises(ValidationError):
+        DisagreementRecord(
+            disagreement_id="DSG-000001",
+            disagreement_type=DisagreementType.WITHIN_PAPER,
+            reported_values=[],
+        )
 

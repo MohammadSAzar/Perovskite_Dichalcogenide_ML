@@ -1,0 +1,30 @@
+[
+  {
+    "sample_series_id": "SER-0001",
+    "paper_id": "PPR-0001",
+    "pair_id": "PAIR-0001",
+    "series_name_reported": "MoS2/PbTiO3 loading series",
+    "notes": null
+  },
+  {
+    "sample_series_id": "SER-0002",
+    "paper_id": "PPR-0002",
+    "pair_id": "PAIR-0002",
+    "series_name_reported": "MoS2/LaNiO3 loading series",
+    "notes": null
+  },
+  {
+    "sample_series_id": "SER-0003",
+    "paper_id": "PPR-0003",
+    "pair_id": "PAIR-0003",
+    "series_name_reported": "MoS2/CaTiO3 loading series",
+    "notes": null
+  },
+  {
+    "sample_series_id": "SER-0004",
+    "paper_id": "PPR-0004",
+    "pair_id": "PAIR-0004",
+    "series_name_reported": "CaTiO3/WS2 loading series",
+    "notes": null
+  }
+]

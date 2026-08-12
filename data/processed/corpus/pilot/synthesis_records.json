@@ -1,0 +1,114 @@
+[
+  {
+    "synthesis_id": "SYN-0001",
+    "sample_id": "SMP-0001",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0002",
+    "sample_id": "SMP-0002",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0003",
+    "sample_id": "SMP-0003",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0004",
+    "sample_id": "SMP-0004",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0005",
+    "sample_id": "SMP-0005",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0006",
+    "sample_id": "SMP-0006",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0007",
+    "sample_id": "SMP-0007",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0008",
+    "sample_id": "SMP-0008",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0009",
+    "sample_id": "SMP-0009",
+    "topology": "psk_first_two_stage",
+    "method_reported": "in-situ hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0010",
+    "sample_id": "SMP-0010",
+    "topology": "tmd_first_two_stage",
+    "method_reported": "hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0011",
+    "sample_id": "SMP-0011",
+    "topology": "tmd_first_two_stage",
+    "method_reported": "hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0012",
+    "sample_id": "SMP-0012",
+    "topology": "tmd_first_two_stage",
+    "method_reported": "hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0013",
+    "sample_id": "SMP-0013",
+    "topology": "tmd_first_two_stage",
+    "method_reported": "hydrothermal",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0014",
+    "sample_id": "SMP-0014",
+    "topology": "three_stage",
+    "method_reported": "ultrasonication, stirring and modified heating",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0015",
+    "sample_id": "SMP-0015",
+    "topology": "three_stage",
+    "method_reported": "ultrasonication, stirring and modified heating",
+    "notes": null
+  },
+  {
+    "synthesis_id": "SYN-0016",
+    "sample_id": "SMP-0016",
+    "topology": "three_stage",
+    "method_reported": "ultrasonication, stirring and modified heating",
+    "notes": null
+  }
+]

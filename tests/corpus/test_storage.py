@@ -154,12 +154,14 @@ def test_load_model_list_rejects_invalid_record(tmp_path):
 def test_validate_empty_pilot_directory(tmp_path):
     filenames = [
         "papers.json",
+        "sample_series.json",
         "samples.json",
-        "synthesis_steps.json",
+        "synthesis_records.json",
         "mechanism_assessments.json",
         "mechanism_evidence.json",
         "photocatalytic_tests.json",
         "extraction_records.json",
+        "disagreement_records.json",
     ]
 
     for filename in filenames:
@@ -172,12 +174,14 @@ def test_validate_empty_pilot_directory(tmp_path):
 
     assert counts == {
         "papers.json": 0,
+        "sample_series.json": 0,
         "samples.json": 0,
-        "synthesis_steps.json": 0,
+        "synthesis_records.json": 0,
         "mechanism_assessments.json": 0,
         "mechanism_evidence.json": 0,
         "photocatalytic_tests.json": 0,
         "extraction_records.json": 0,
+        "disagreement_records.json": 0,
     }
 
 
@@ -187,11 +191,13 @@ def test_validate_empty_pilot_directory(tmp_path):
 def test_validate_pilot_directory_rejects_missing_table(tmp_path):
     filenames = [
         "papers.json",
+        "sample_series.json",
         "samples.json",
-        "synthesis_steps.json",
+        "synthesis_records.json",
         "mechanism_assessments.json",
         "mechanism_evidence.json",
         "photocatalytic_tests.json",
+        "extraction_records.json",
     ]
 
     for filename in filenames:
@@ -212,12 +218,14 @@ def test_validate_pilot_directory_rejects_missing_table(tmp_path):
 # ---------------------------------------------------------------------------
 def test_validate_pilot_directory_rejects_invalid_record(tmp_path):
     valid_empty_files = [
+        "sample_series.json",
         "samples.json",
-        "synthesis_steps.json",
+        "synthesis_records.json",
         "mechanism_assessments.json",
         "mechanism_evidence.json",
         "photocatalytic_tests.json",
         "extraction_records.json",
+        "disagreement_records.json",
     ]
 
     for filename in valid_empty_files:
@@ -256,41 +264,50 @@ def test_validate_pilot_relationships(tmp_path):
                 "year": 2023,
             }
         ],
+        "sample_series.json": [
+            {
+                "sample_series_id": "SER-0001",
+                "paper_id": "PPR-0001",
+                "pair_id": "PAIR-0001",
+            }
+        ],
         "samples.json": [
             {
                 "sample_id": "SMP-0001",
                 "paper_id": "PPR-0001",
+                "sample_series_id": "SER-0001",
                 "psk": {
-                    "formula_reported": "CaTiO3"
+                    "formula_reported": "CaTiO3",
                 },
                 "tmd": {
-                    "formula_reported": "MoS2"
-                }
+                    "formula_reported": "MoS2",
+                },
             }
         ],
-        "synthesis_steps.json": [
+        "synthesis_records.json": [
             {
-                "synthesis_step_id": "SYN-0001",
+                "synthesis_id": "SYN-0001",
                 "sample_id": "SMP-0001",
-                "step_order": 1
+                "topology": "psk_first_two_stage",
             }
         ],
         "mechanism_assessments.json": [
             {
                 "mechanism_assessment_id": "MEA-0001",
-                "sample_id": "SMP-0001"
+                "sample_id": "SMP-0001",
+                "applies_to_series_id": "SER-0001",
             }
         ],
         "mechanism_evidence.json": [
             {
                 "evidence_id": "EVD-0001",
-                "mechanism_assessment_id": "MEA-0001"
+                "mechanism_assessment_id": "MEA-0001",
             }
         ],
         "photocatalytic_tests.json": [
             {
                 "test_id": "TST-0001",
-                "sample_id": "SMP-0001"
+                "sample_id": "SMP-0001",
             }
         ],
         "extraction_records.json": [
@@ -299,7 +316,21 @@ def test_validate_pilot_relationships(tmp_path):
                 "paper_id": "PPR-0001",
                 "target_table": "photocatalytic_tests",
                 "target_record_id": "TST-0001",
-                "target_field": "test_duration_h"
+                "target_field": "test_duration_h",
+            }
+        ],
+        "disagreement_records.json": [
+            {
+                "disagreement_id": "DSG-0001",
+                "disagreement_type": "within_paper",
+                "paper_ids": ["PPR-0001"],
+                "target_table": "photocatalytic_tests",
+                "target_record_ids": ["TST-0001"],
+                "target_field": "performance_metric_value",
+                "reported_values": [
+                    "90%",
+                    "92%",
+                ],
             }
         ],
     }
@@ -320,23 +351,130 @@ def test_validate_pilot_relationships(tmp_path):
 def test_validate_pilot_relationships_rejects_missing_paper(tmp_path):
     tables = {
         "papers.json": [],
+        "sample_series.json": [],
         "samples.json": [
             {
                 "sample_id": "SMP-0001",
                 "paper_id": "PPR-9999",
                 "psk": {
-                    "formula_reported": "CaTiO3"
+                    "formula_reported": "CaTiO3",
                 },
                 "tmd": {
-                    "formula_reported": "MoS2"
-                }
+                    "formula_reported": "MoS2",
+                },
             }
         ],
-        "synthesis_steps.json": [],
+        "synthesis_records.json": [],
         "mechanism_assessments.json": [],
         "mechanism_evidence.json": [],
         "photocatalytic_tests.json": [],
         "extraction_records.json": [],
+        "disagreement_records.json": [],
+    }
+
+    for filename, data in tables.items():
+        with (tmp_path / filename).open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(data, file)
+
+    with pytest.raises(
+        ValueError,
+        match="Invalid foreign key",
+    ):
+        validate_pilot_relationships(tmp_path)
+
+
+# ---------------------------------------------------------------------------
+# INVALID SAMPLE SERIES LINK
+# ---------------------------------------------------------------------------
+def test_validate_pilot_relationships_rejects_missing_sample_series(
+    tmp_path,
+):
+    tables = {
+        "papers.json": [
+            {
+                "paper_id": "PPR-0001",
+                "title": "Test paper",
+                "year": 2023,
+            }
+        ],
+        "sample_series.json": [],
+        "samples.json": [
+            {
+                "sample_id": "SMP-0001",
+                "paper_id": "PPR-0001",
+                "sample_series_id": "SER-9999",
+                "psk": {
+                    "formula_reported": "CaTiO3",
+                },
+                "tmd": {
+                    "formula_reported": "MoS2",
+                },
+            }
+        ],
+        "synthesis_records.json": [],
+        "mechanism_assessments.json": [],
+        "mechanism_evidence.json": [],
+        "photocatalytic_tests.json": [],
+        "extraction_records.json": [],
+        "disagreement_records.json": [],
+    }
+
+    for filename, data in tables.items():
+        with (tmp_path / filename).open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(data, file)
+
+    with pytest.raises(
+        ValueError,
+        match="Invalid foreign key",
+    ):
+        validate_pilot_relationships(tmp_path)
+
+
+# ---------------------------------------------------------------------------
+# INVALID MECHANISM SERIES LINK
+# ---------------------------------------------------------------------------
+def test_validate_pilot_relationships_rejects_bad_mechanism_series(
+    tmp_path,
+):
+    tables = {
+        "papers.json": [
+            {
+                "paper_id": "PPR-0001",
+                "title": "Test paper",
+                "year": 2023,
+            }
+        ],
+        "sample_series.json": [],
+        "samples.json": [
+            {
+                "sample_id": "SMP-0001",
+                "paper_id": "PPR-0001",
+                "psk": {
+                    "formula_reported": "CaTiO3",
+                },
+                "tmd": {
+                    "formula_reported": "MoS2",
+                },
+            }
+        ],
+        "synthesis_records.json": [],
+        "mechanism_assessments.json": [
+            {
+                "mechanism_assessment_id": "MEA-0001",
+                "sample_id": "SMP-0001",
+                "applies_to_series_id": "SER-9999",
+            }
+        ],
+        "mechanism_evidence.json": [],
+        "photocatalytic_tests.json": [],
+        "extraction_records.json": [],
+        "disagreement_records.json": [],
     }
 
     for filename, data in tables.items():
@@ -357,8 +495,8 @@ def test_validate_pilot_relationships_rejects_missing_paper(tmp_path):
 # INVALID EXTRACTION TARGET
 # ---------------------------------------------------------------------------
 def test_validate_pilot_relationships_rejects_bad_extraction_target(
-        tmp_path,
-    ):
+    tmp_path,
+):
     tables = {
         "papers.json": [
             {
@@ -367,8 +505,9 @@ def test_validate_pilot_relationships_rejects_bad_extraction_target(
                 "year": 2023,
             }
         ],
+        "sample_series.json": [],
         "samples.json": [],
-        "synthesis_steps.json": [],
+        "synthesis_records.json": [],
         "mechanism_assessments.json": [],
         "mechanism_evidence.json": [],
         "photocatalytic_tests.json": [],
@@ -378,7 +517,58 @@ def test_validate_pilot_relationships_rejects_bad_extraction_target(
                 "paper_id": "PPR-0001",
                 "target_table": "photocatalytic_tests",
                 "target_record_id": "TST-9999",
-                "target_field": "test_duration_h"
+                "target_field": "test_duration_h",
+            }
+        ],
+        "disagreement_records.json": [],
+    }
+
+    for filename, data in tables.items():
+        with (tmp_path / filename).open(
+            "w",
+            encoding="utf-8",
+        ) as file:
+            json.dump(data, file)
+
+    with pytest.raises(
+        ValueError,
+        match="Invalid foreign key",
+    ):
+        validate_pilot_relationships(tmp_path)
+
+
+# ---------------------------------------------------------------------------
+# INVALID DISAGREEMENT TARGET
+# ---------------------------------------------------------------------------
+def test_validate_pilot_relationships_rejects_bad_disagreement_target(
+    tmp_path,
+):
+    tables = {
+        "papers.json": [
+            {
+                "paper_id": "PPR-0001",
+                "title": "Test paper",
+                "year": 2023,
+            }
+        ],
+        "sample_series.json": [],
+        "samples.json": [],
+        "synthesis_records.json": [],
+        "mechanism_assessments.json": [],
+        "mechanism_evidence.json": [],
+        "photocatalytic_tests.json": [],
+        "extraction_records.json": [],
+        "disagreement_records.json": [
+            {
+                "disagreement_id": "DSG-0001",
+                "disagreement_type": "within_paper",
+                "paper_ids": ["PPR-0001"],
+                "target_table": "photocatalytic_tests",
+                "target_record_ids": ["TST-9999"],
+                "reported_values": [
+                    "90%",
+                    "92%",
+                ],
             }
         ],
     }

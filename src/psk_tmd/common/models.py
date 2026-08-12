@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 from psk_tmd.common.constants import (
     AccessType,
     ChargeTransferClass,
+    DisagreementStatus,
+    DisagreementType,
     EvidenceStrength,
     EvidenceSupport,
     EvidenceType,
@@ -14,7 +16,7 @@ from psk_tmd.common.constants import (
     ManualReviewStatus,
     MechanismLabel,
     PhotocatalyticApplication,
-    SynthesisStepRole,
+    ProvenanceOperation,
     SynthesisTopology,
 )
 
@@ -102,9 +104,19 @@ class HeterostructureDescription(BaseModel):
 # ---------------------------------------------------------------------------
 # EXPERIMENTAL SAMPLES
 # ---------------------------------------------------------------------------
+class SampleSeries(BaseModel):
+    sample_series_id: str
+    paper_id: str
+
+    pair_id: str | None = None
+    series_name_reported: str | None = None
+    notes: str | None = None
+
+
 class ExperimentalSample(BaseModel):
     sample_id: str
     paper_id: str
+    sample_series_id: str | None = None
     sample_name_reported: str | None = None
 
     psk: PSKDescription
@@ -124,28 +136,12 @@ class ExperimentalSample(BaseModel):
 # ---------------------------------------------------------------------------
 # SYNTHESIS
 # ---------------------------------------------------------------------------
-class SynthesisStep(BaseModel):
-    synthesis_step_id: str
+class SynthesisRecord(BaseModel):
+    synthesis_id: str
     sample_id: str
-    step_order: int = Field(ge=1)
 
-    step_role: SynthesisStepRole = SynthesisStepRole.UNKNOWN
-    topology: SynthesisTopology | None = None
-
-    method: str | None = None
-    precursors: list[str] = Field(default_factory=list)
-
-    temperature_c: float | None = None
-    time_h: float | None = Field(default=None, ge=0)
-    pressure: str | None = None
-    atmosphere: str | None = None
-    solvent: str | None = None
-    ph: float | None = None
-
-    calcination_temperature_c: float | None = None
-    calcination_time_h: float | None = Field(default=None, ge=0)
-
-    raw_description: str | None = None
+    topology: SynthesisTopology = SynthesisTopology.UNKNOWN
+    method_reported: str | None = None
     notes: str | None = None
 
 
@@ -155,6 +151,7 @@ class SynthesisStep(BaseModel):
 class MechanismAssessment(BaseModel):
     mechanism_assessment_id: str
     sample_id: str
+    applies_to_series_id: str | None = None
 
     mechanism_reported: str | None = None
     mechanism_normalized: MechanismLabel = MechanismLabel.UNKNOWN
@@ -200,9 +197,19 @@ class PhotocatalyticTest(BaseModel):
     reaction_type: str | None = None
     target_species: str | None = None
 
+    initial_target_concentration_value: float | None = Field(
+        default=None,
+        ge=0,
+    )
+    initial_target_concentration_unit: str | None = None
+
     light_source: str | None = None
     wavelength_nm: float | None = Field(default=None, ge=0)
-    light_intensity: str | None = None
+    wavelength_min_nm: float | None = Field(default=None, ge=0)
+    wavelength_max_nm: float | None = Field(default=None, ge=0)
+
+    light_intensity_value: float | None = Field(default=None, ge=0)
+    light_intensity_unit: str | None = None
     visible_light_only: bool | None = None
 
     catalyst_mass_mg: float | None = Field(default=None, ge=0)
@@ -210,27 +217,21 @@ class PhotocatalyticTest(BaseModel):
     ph: float | None = None
     sacrificial_agent: str | None = None
     cocatalyst: str | None = None
+
+    dark_equilibration_time_min: float | None = Field(
+        default=None,
+        ge=0,
+    )
     test_duration_h: float | None = Field(default=None, ge=0)
 
     performance_metric_name: str | None = None
     performance_metric_value: float | None = None
     performance_metric_unit: str | None = None
 
-    hydrogen_amount_umol: float | None = Field(default=None, ge=0)
-    hydrogen_rate_reported_value: float | None = Field(default=None, ge=0)
-    hydrogen_rate_reported_unit: str | None = None
-    hydrogen_rate_standardized_umol_g_h: float | None = Field(
-        default=None,
-        ge=0,
-    )
+    cycles: int | None = Field(default=None, ge=1)
+    first_cycle_performance: float | None = None
+    last_cycle_performance: float | None = None
 
-    sth_percent: float | None = Field(default=None, ge=0)
-    apparent_quantum_yield_percent: float | None = Field(
-        default=None,
-        ge=0,
-    )
-
-    cycles: int | None = Field(default=None, ge=0)
     performance_notes: str | None = None
 
 
@@ -244,6 +245,8 @@ class ExtractionRecord(BaseModel):
     target_table: str | None = None
     target_record_id: str | None = None
     target_field: str | None = None
+
+    provenance_operation: ProvenanceOperation = ProvenanceOperation.UNKNOWN
 
     extractor_type: ExtractorType = ExtractorType.UNKNOWN
     extractor_name: str | None = None
@@ -263,4 +266,25 @@ class ExtractionRecord(BaseModel):
     manual_verified: bool = False
     reviewer: str | None = None
     notes: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# DISAGREEMENTS AND SOURCE CONFLICTS
+# ---------------------------------------------------------------------------
+class DisagreementRecord(BaseModel):
+    disagreement_id: str
+    disagreement_type: DisagreementType
+    status: DisagreementStatus = DisagreementStatus.UNRESOLVED
+
+    paper_ids: list[str] = Field(default_factory=list)
+    target_table: str | None = None
+    target_record_ids: list[str] = Field(default_factory=list)
+    target_field: str | None = None
+
+    reported_values: list[str] = Field(min_length=1)
+    selected_value: str | None = None
+
+    description: str | None = None
+    resolution_notes: str | None = None
+
 

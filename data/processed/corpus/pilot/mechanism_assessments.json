@@ -2,6 +2,7 @@
   {
     "mechanism_assessment_id": "MEA-0001",
     "sample_id": "SMP-0002",
+    "applies_to_series_id": "SER-0001",
     "mechanism_reported": "S-scheme heterojunction",
     "mechanism_normalized": "s_scheme",
     "charge_transfer_class": "mediated_recombination",
@@ -14,11 +15,12 @@
   {
     "mechanism_assessment_id": "MEA-0002",
     "sample_id": "SMP-0007",
+    "applies_to_series_id": "SER-0002",
     "mechanism_reported": "heterojunction charge-transfer mechanism illustrated in Fig. 11",
     "mechanism_normalized": "type_i",
     "charge_transfer_class": "type_i",
     "claim_explicit": false,
-    "confidence": null,
+    "assessment_confidence": null,
     "manual_review_status": "reviewed",
     "label_status": "accepted",
     "reviewer_notes": "The article does not explicitly use the term Type-I. The Type-I label is curator-assigned from the straddling band alignment and carrier-transfer diagram shown in Fig. 11 together with the reported band positions. This paper is retained as a figure-dependent mechanism-curation case."
@@ -26,11 +28,12 @@
   {
     "mechanism_assessment_id": "MEA-0003",
     "sample_id": "SMP-0011",
+    "applies_to_series_id": "SER-0003",
     "mechanism_reported": "Z-scheme electron transport mechanism",
     "mechanism_normalized": "z_scheme",
     "charge_transfer_class": "mediated_recombination",
     "claim_explicit": true,
-    "confidence": null,
+    "assessment_confidence": null,
     "manual_review_status": "reviewed",
     "label_status": "accepted",
     "reviewer_notes": "The Z-scheme mechanism is explicitly claimed by the authors in the title, abstract, discussion, and mechanism analysis. Detailed mechanism characterization is centered on the optimized MoS2/CaTiO3-1% heterostructure."
@@ -38,14 +41,14 @@
   {
     "mechanism_assessment_id": "MEA-0004",
     "sample_id": "SMP-0015",
+    "applies_to_series_id": "SER-0004",
     "mechanism_reported": "direct Z-scheme heterojunction",
     "mechanism_normalized": "z_scheme",
     "charge_transfer_class": "mediated_recombination",
     "claim_explicit": true,
-    "confidence": null,
+    "assessment_confidence": null,
     "manual_review_status": "reviewed",
     "label_status": "accepted",
     "reviewer_notes": "The authors explicitly assign a direct Z-scheme mechanism to the CaTiO3/WS2 heterostructure. The detailed mechanism discussion and performance analysis focus on the optimized CaTiO3(20 wt%)/WS2 sample. The abstract contains an unrelated pasted phrase referring to LaNiO3/g-C3N4; this is treated as a source inconsistency and is not used for normalization."
   }
 ]
-

@@ -2,6 +2,7 @@
   {
     "sample_id": "SMP-0001",
     "paper_id": "PPR-0001",
+    "sample_series_id": "SER-0001",
     "sample_name_reported": "0.5%-MoS2/PbTiO3",
     "psk": {
       "formula_reported": "PbTiO3",
@@ -70,6 +71,7 @@
   {
     "sample_id": "SMP-0002",
     "paper_id": "PPR-0001",
+    "sample_series_id": "SER-0001",
     "sample_name_reported": "1%-MoS2/PbTiO3",
     "psk": {
       "formula_reported": "PbTiO3",
@@ -138,6 +140,7 @@
   {
     "sample_id": "SMP-0003",
     "paper_id": "PPR-0001",
+    "sample_series_id": "SER-0001",
     "sample_name_reported": "2.5%-MoS2/PbTiO3",
     "psk": {
       "formula_reported": "PbTiO3",
@@ -206,6 +209,7 @@
   {
     "sample_id": "SMP-0004",
     "paper_id": "PPR-0001",
+    "sample_series_id": "SER-0001",
     "sample_name_reported": "5%-MoS2/PbTiO3",
     "psk": {
       "formula_reported": "PbTiO3",
@@ -272,74 +276,23 @@
     "notes": null
   },
   {
-  "sample_id": "SMP-0005",
-  "paper_id": "PPR-0002",
-  "sample_name_reported": "1% MoS2/LaNiO3",
-  "psk": {
-    "formula_reported": "LaNiO3",
-    "formula_normalized": "LaNiO3",
-    "parent_formula": "LaNiO3",
-    "a_site_elements": ["La"],
-    "b_site_elements": ["Ni"],
-    "anion_site_elements": ["O"],
-    "a_site_dopants": [],
-    "b_site_dopants": [],
-    "anion_site_dopants": [],
-    "phase_reported": null,
-    "space_group_reported": null,
-    "morphology": null,
-    "particle_size_nm": null,
-    "defects_reported": null,
-    "doping_description": null,
-    "commercial": false
-  },
-  "tmd": {
-    "formula_reported": "MoS2",
-    "formula_normalized": "MoS2",
-    "parent_formula": "MoS2",
-    "m_site_elements": ["Mo"],
-    "x_site_elements": ["S"],
-    "m_site_dopants": [],
-    "x_site_dopants": [],
-    "phase_reported": null,
-    "layer_description": null,
-    "morphology": null,
-    "particle_size_nm": null,
-    "defects_reported": null,
-    "doping_description": null,
-    "commercial": false
-  },
-  "heterostructure": {
-    "heterostructure_type_reported": "MoS2/LaNiO3 composite",
-    "component_ratio_reported": "1 wt% MoS2",
-    "interface_description": null,
-    "contact_type": null,
-    "preferred_facet_reported": null,
-    "cocatalyst_present": false,
-    "cocatalyst": null,
-    "mediator_present": false,
-    "mediator": null,
-    "morphology": null,
-    "interface_notes": null
-  },
-  "pair_id": "PAIR-0002",
-  "psk_fraction": 99.0,
-  "tmd_fraction": 1.0,
-  "fraction_basis": "weight_percent",
-  "is_reference_sample": false,
-  "notes": "LaNiO3 was prepared using the optimized La/Ni precursor molar ratio of 2:1."
-},
-  {
-    "sample_id": "SMP-0006",
+    "sample_id": "SMP-0005",
     "paper_id": "PPR-0002",
-    "sample_name_reported": "2% MoS2/LaNiO3",
+    "sample_series_id": "SER-0002",
+    "sample_name_reported": "1% MoS2/LaNiO3",
     "psk": {
       "formula_reported": "LaNiO3",
       "formula_normalized": "LaNiO3",
       "parent_formula": "LaNiO3",
-      "a_site_elements": ["La"],
-      "b_site_elements": ["Ni"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "La"
+      ],
+      "b_site_elements": [
+        "Ni"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -355,8 +308,81 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
+      "m_site_dopants": [],
+      "x_site_dopants": [],
+      "phase_reported": null,
+      "layer_description": null,
+      "morphology": null,
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "heterostructure": {
+      "heterostructure_type_reported": "MoS2/LaNiO3 composite",
+      "component_ratio_reported": "1 wt% MoS2",
+      "interface_description": null,
+      "contact_type": null,
+      "preferred_facet_reported": null,
+      "cocatalyst_present": false,
+      "cocatalyst": null,
+      "mediator_present": false,
+      "mediator": null,
+      "morphology": null,
+      "interface_notes": null
+    },
+    "pair_id": "PAIR-0002",
+    "psk_fraction": 99.0,
+    "tmd_fraction": 1.0,
+    "fraction_basis": "weight_percent",
+    "is_reference_sample": false,
+    "notes": "LaNiO3 was prepared using the optimized La/Ni precursor molar ratio of 2:1."
+  },
+  {
+    "sample_id": "SMP-0006",
+    "paper_id": "PPR-0002",
+    "sample_series_id": "SER-0002",
+    "sample_name_reported": "2% MoS2/LaNiO3",
+    "psk": {
+      "formula_reported": "LaNiO3",
+      "formula_normalized": "LaNiO3",
+      "parent_formula": "LaNiO3",
+      "a_site_elements": [
+        "La"
+      ],
+      "b_site_elements": [
+        "Ni"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
+      "a_site_dopants": [],
+      "b_site_dopants": [],
+      "anion_site_dopants": [],
+      "phase_reported": null,
+      "space_group_reported": null,
+      "morphology": null,
+      "particle_size_nm": null,
+      "defects_reported": null,
+      "doping_description": null,
+      "commercial": false
+    },
+    "tmd": {
+      "formula_reported": "MoS2",
+      "formula_normalized": "MoS2",
+      "parent_formula": "MoS2",
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -390,14 +416,21 @@
   {
     "sample_id": "SMP-0007",
     "paper_id": "PPR-0002",
+    "sample_series_id": "SER-0002",
     "sample_name_reported": "3% MoS2/LaNiO3",
     "psk": {
       "formula_reported": "LaNiO3",
       "formula_normalized": "LaNiO3",
       "parent_formula": "LaNiO3",
-      "a_site_elements": ["La"],
-      "b_site_elements": ["Ni"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "La"
+      ],
+      "b_site_elements": [
+        "Ni"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -413,8 +446,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -448,14 +485,21 @@
   {
     "sample_id": "SMP-0008",
     "paper_id": "PPR-0002",
+    "sample_series_id": "SER-0002",
     "sample_name_reported": "4% MoS2/LaNiO3",
     "psk": {
       "formula_reported": "LaNiO3",
       "formula_normalized": "LaNiO3",
       "parent_formula": "LaNiO3",
-      "a_site_elements": ["La"],
-      "b_site_elements": ["Ni"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "La"
+      ],
+      "b_site_elements": [
+        "Ni"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -471,8 +515,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -506,14 +554,21 @@
   {
     "sample_id": "SMP-0009",
     "paper_id": "PPR-0002",
+    "sample_series_id": "SER-0002",
     "sample_name_reported": "5% MoS2/LaNiO3",
     "psk": {
       "formula_reported": "LaNiO3",
       "formula_normalized": "LaNiO3",
       "parent_formula": "LaNiO3",
-      "a_site_elements": ["La"],
-      "b_site_elements": ["Ni"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "La"
+      ],
+      "b_site_elements": [
+        "Ni"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -529,8 +584,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -564,14 +623,21 @@
   {
     "sample_id": "SMP-0010",
     "paper_id": "PPR-0003",
+    "sample_series_id": "SER-0003",
     "sample_name_reported": "MoS2/CaTiO3-0.5%",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -587,8 +653,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": "hexagonal 2H",
@@ -622,14 +692,21 @@
   {
     "sample_id": "SMP-0011",
     "paper_id": "PPR-0003",
+    "sample_series_id": "SER-0003",
     "sample_name_reported": "MoS2/CaTiO3-1%",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -645,8 +722,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": "hexagonal 2H",
@@ -680,14 +761,21 @@
   {
     "sample_id": "SMP-0012",
     "paper_id": "PPR-0003",
+    "sample_series_id": "SER-0003",
     "sample_name_reported": "MoS2/CaTiO3-3%",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -703,8 +791,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": "hexagonal 2H",
@@ -738,14 +830,21 @@
   {
     "sample_id": "SMP-0013",
     "paper_id": "PPR-0003",
+    "sample_series_id": "SER-0003",
     "sample_name_reported": "MoS2/CaTiO3-5%",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -761,8 +860,12 @@
       "formula_reported": "MoS2",
       "formula_normalized": "MoS2",
       "parent_formula": "MoS2",
-      "m_site_elements": ["Mo"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "Mo"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": "hexagonal 2H",
@@ -796,14 +899,21 @@
   {
     "sample_id": "SMP-0014",
     "paper_id": "PPR-0004",
+    "sample_series_id": "SER-0004",
     "sample_name_reported": "CaTiO3(10 wt%)/WS2",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -819,8 +929,12 @@
       "formula_reported": "WS2",
       "formula_normalized": "WS2",
       "parent_formula": "WS2",
-      "m_site_elements": ["W"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "W"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -854,14 +968,21 @@
   {
     "sample_id": "SMP-0015",
     "paper_id": "PPR-0004",
+    "sample_series_id": "SER-0004",
     "sample_name_reported": "CaTiO3(20 wt%)/WS2",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -877,8 +998,12 @@
       "formula_reported": "WS2",
       "formula_normalized": "WS2",
       "parent_formula": "WS2",
-      "m_site_elements": ["W"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "W"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -912,14 +1037,21 @@
   {
     "sample_id": "SMP-0016",
     "paper_id": "PPR-0004",
+    "sample_series_id": "SER-0004",
     "sample_name_reported": "CaTiO3(30 wt%)/WS2",
     "psk": {
       "formula_reported": "CaTiO3",
       "formula_normalized": "CaTiO3",
       "parent_formula": "CaTiO3",
-      "a_site_elements": ["Ca"],
-      "b_site_elements": ["Ti"],
-      "anion_site_elements": ["O"],
+      "a_site_elements": [
+        "Ca"
+      ],
+      "b_site_elements": [
+        "Ti"
+      ],
+      "anion_site_elements": [
+        "O"
+      ],
       "a_site_dopants": [],
       "b_site_dopants": [],
       "anion_site_dopants": [],
@@ -935,8 +1067,12 @@
       "formula_reported": "WS2",
       "formula_normalized": "WS2",
       "parent_formula": "WS2",
-      "m_site_elements": ["W"],
-      "x_site_elements": ["S"],
+      "m_site_elements": [
+        "W"
+      ],
+      "x_site_elements": [
+        "S"
+      ],
       "m_site_dopants": [],
       "x_site_dopants": [],
       "phase_reported": null,
@@ -968,5 +1104,3 @@
     "notes": "The paper identifies a CaTiO3(30 wt%)/WS2 composition variant. The synthesis section contains typographical inconsistencies in the printed sample labels."
   }
 ]
-
-
