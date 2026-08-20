@@ -1,0 +1,506 @@
+import pytest
+
+from psk_tmd.common.constants import (
+    CharacterizationRole,
+    EvidenceContextType,
+    EvidenceStrength,
+    EvidenceSupport,
+    EvidenceType,
+    LabelStatus,
+    ManualReviewStatus,
+    MechanismLabel,
+    PaperSectionRole,
+)
+from psk_tmd.corpus.builders import (
+    build_mechanism_assessment,
+    build_mechanism_evidence,
+    build_mechanism_records,
+    build_source_location,
+    normalize_evidence_type,
+)
+from psk_tmd.corpus.extraction import (
+    MechanismClaimCandidate,
+    MechanismEvidenceCandidate,
+    MechanismExtractionResult,
+)
+
+
+# ---------------------------------------------------------------------------
+# MAKE Z-SCHEME EXTRACTION RESULT
+# ---------------------------------------------------------------------------
+def make_z_scheme_extraction_result(
+) -> MechanismExtractionResult:
+    return MechanismExtractionResult(
+        mechanism_claims=[
+            MechanismClaimCandidate(
+                mechanism_reported=(
+                    "Z-scheme"
+                ),
+                mechanism_normalized=(
+                    MechanismLabel.Z_SCHEME
+                ),
+                charge_transfer_class=None,
+                claim_explicit=True,
+                page_number=9,
+                section_title=(
+                    "3.5. Possible "
+                    "photocatalytic mechanism"
+                ),
+                section_role=(
+                    PaperSectionRole.MECHANISM
+                ),
+                source_text=(
+                    "The Z-scheme mechanism "
+                    "was proposed."
+                ),
+                score=7.0,
+            ),
+        ],
+        characterization_candidates=[],
+        mechanism_evidence_candidates=[
+            MechanismEvidenceCandidate(
+                evidence_type=(
+                    "radical_trapping"
+                ),
+                characterization_role=(
+                    CharacterizationRole.MECHANISM_ASSESSMENT
+                ),
+                mechanism_discriminating=True,
+                requires_context=True,
+                required_context=[
+                    EvidenceContextType.BAND_EDGES,
+                    EvidenceContextType.REDOX_POTENTIALS,
+                ],
+                page_number=9,
+                section_title=(
+                    "3.5. Possible "
+                    "photocatalytic mechanism"
+                ),
+                section_role=(
+                    PaperSectionRole.MECHANISM
+                ),
+                matched_terms=[
+                    "scavenger",
+                    "active species",
+                ],
+                source_text=(
+                    "Active-species trapping "
+                    "experiments identified "
+                    "the predominant radicals."
+                ),
+                score=20.0,
+            ),
+            MechanismEvidenceCandidate(
+                evidence_type=(
+                    "band_alignment"
+                ),
+                characterization_role=(
+                    CharacterizationRole.BAND_STRUCTURE
+                ),
+                mechanism_discriminating=False,
+                requires_context=False,
+                required_context=[],
+                page_number=9,
+                section_title=(
+                    "3.6. Photocatalytic "
+                    "mechanism"
+                ),
+                section_role=(
+                    PaperSectionRole.MECHANISM
+                ),
+                matched_terms=[
+                    "conduction band",
+                    "valence band",
+                ],
+                source_text=(
+                    "The conduction-band and "
+                    "valence-band positions "
+                    "were used to interpret "
+                    "the observed radicals."
+                ),
+                score=10.0,
+            ),
+        ],
+    )
+
+
+# ---------------------------------------------------------------------------
+# NORMALIZE KNOWN EVIDENCE TYPE
+# ---------------------------------------------------------------------------
+def test_normalize_known_evidence_type():
+    evidence_type = next(
+        iter(
+            EvidenceType
+        )
+    )
+
+    normalized, subtype = (
+        normalize_evidence_type(
+            evidence_type.value
+        )
+    )
+
+    assert (
+        normalized
+        == evidence_type
+    )
+
+    assert (
+        subtype
+        is None
+    )
+
+
+# ---------------------------------------------------------------------------
+# NORMALIZE UNKNOWN EVIDENCE TYPE
+# ---------------------------------------------------------------------------
+def test_normalize_unknown_evidence_type():
+    normalized, subtype = (
+        normalize_evidence_type(
+            "custom_technique"
+        )
+    )
+
+    assert (
+        normalized
+        == EvidenceType.UNKNOWN
+    )
+
+    assert (
+        subtype
+        == "custom_technique"
+    )
+
+
+# ---------------------------------------------------------------------------
+# BUILD SOURCE LOCATION
+# ---------------------------------------------------------------------------
+def test_build_source_location():
+    candidate = (
+        make_z_scheme_extraction_result()
+        .mechanism_evidence_candidates[
+            0
+        ]
+    )
+
+    location = build_source_location(
+        candidate
+    )
+
+    assert (
+        location
+        == (
+            "page 9; "
+            "3.5. Possible "
+            "photocatalytic mechanism"
+        )
+    )
+
+
+# ---------------------------------------------------------------------------
+# BUILD MECHANISM ASSESSMENT
+# ---------------------------------------------------------------------------
+def test_build_mechanism_assessment():
+    extraction_result = (
+        make_z_scheme_extraction_result()
+    )
+
+    assessment = (
+        build_mechanism_assessment(
+            extraction_result=(
+                extraction_result
+            ),
+            mechanism_assessment_id=(
+                "MEA-0001"
+            ),
+            sample_id="SMP-0001",
+            applies_to_series_id=(
+                "SER-0001"
+            ),
+        )
+    )
+
+    assert (
+        assessment.mechanism_assessment_id
+        == "MEA-0001"
+    )
+
+    assert (
+        assessment.sample_id
+        == "SMP-0001"
+    )
+
+    assert (
+        assessment.applies_to_series_id
+        == "SER-0001"
+    )
+
+    assert (
+        assessment.mechanism_normalized
+        == MechanismLabel.Z_SCHEME
+    )
+
+    assert (
+        assessment.mechanism_reported
+        == "Z-scheme"
+    )
+
+    assert (
+        assessment.charge_transfer_class
+        is None
+    )
+
+    assert (
+        assessment.claim_explicit
+        is True
+    )
+
+    assert (
+        assessment.assessment_confidence
+        is None
+    )
+
+    assert (
+        assessment.manual_review_status
+        == ManualReviewStatus.PENDING
+    )
+
+    assert (
+        assessment.label_status
+        == LabelStatus.PENDING_REVIEW
+    )
+
+
+# ---------------------------------------------------------------------------
+# NO AUTOMATIC ML CLASS
+# ---------------------------------------------------------------------------
+def test_z_scheme_does_not_assign_ml_class():
+    assessment = (
+        build_mechanism_assessment(
+            extraction_result=(
+                make_z_scheme_extraction_result()
+            ),
+            mechanism_assessment_id=(
+                "MEA-0001"
+            ),
+            sample_id="SMP-0001",
+        )
+    )
+
+    assert (
+        assessment.mechanism_normalized
+        == MechanismLabel.Z_SCHEME
+    )
+
+    assert (
+        assessment.charge_transfer_class
+        is None
+    )
+
+
+# ---------------------------------------------------------------------------
+# BUILD UNKNOWN MECHANISM ASSESSMENT
+# ---------------------------------------------------------------------------
+def test_build_unknown_mechanism_assessment():
+    extraction_result = (
+        MechanismExtractionResult(
+            mechanism_claims=[],
+            characterization_candidates=[],
+            mechanism_evidence_candidates=[],
+        )
+    )
+
+    assessment = (
+        build_mechanism_assessment(
+            extraction_result=(
+                extraction_result
+            ),
+            mechanism_assessment_id=(
+                "MEA-0001"
+            ),
+            sample_id="SMP-0001",
+        )
+    )
+
+    assert (
+        assessment.mechanism_normalized
+        == MechanismLabel.UNKNOWN
+    )
+
+    assert (
+        assessment.mechanism_reported
+        is None
+    )
+
+    assert (
+        assessment.claim_explicit
+        is False
+    )
+
+    assert (
+        assessment.charge_transfer_class
+        is None
+    )
+
+
+# ---------------------------------------------------------------------------
+# BUILD MECHANISM EVIDENCE
+# ---------------------------------------------------------------------------
+def test_build_mechanism_evidence():
+    candidate = (
+        make_z_scheme_extraction_result()
+        .mechanism_evidence_candidates[
+            0
+        ]
+    )
+
+    evidence = (
+        build_mechanism_evidence(
+            candidate=candidate,
+            evidence_id="EVD-0001",
+            mechanism_assessment_id=(
+                "MEA-0001"
+            ),
+        )
+    )
+
+    assert (
+        evidence.evidence_id
+        == "EVD-0001"
+    )
+
+    assert (
+        evidence.mechanism_assessment_id
+        == "MEA-0001"
+    )
+
+    assert (
+        evidence.characterization_role
+        == CharacterizationRole.MECHANISM_ASSESSMENT
+    )
+
+    assert (
+        evidence.mechanism_discriminating
+        is True
+    )
+
+    assert (
+        evidence.requires_context
+        is True
+    )
+
+    assert (
+        EvidenceContextType.BAND_EDGES
+        in evidence.required_context
+    )
+
+    assert (
+        EvidenceContextType.REDOX_POTENTIALS
+        in evidence.required_context
+    )
+
+    assert (
+        evidence.support
+        == EvidenceSupport.UNKNOWN
+    )
+
+    assert (
+        evidence.evidence_strength
+        == EvidenceStrength.UNKNOWN
+    )
+
+    assert (
+        evidence.page_number
+        == 9
+    )
+
+    assert (
+        evidence.section_role
+        == PaperSectionRole.MECHANISM
+    )
+
+    assert (
+        evidence.reported_result
+        == candidate.source_text
+    )
+
+
+# ---------------------------------------------------------------------------
+# BUILD COMPLETE MECHANISM RECORDS
+# ---------------------------------------------------------------------------
+def test_build_mechanism_records():
+    result = build_mechanism_records(
+        extraction_result=(
+            make_z_scheme_extraction_result()
+        ),
+        mechanism_assessment_id=(
+            "MEA-0001"
+        ),
+        evidence_ids=[
+            "EVD-0001",
+            "EVD-0002",
+        ],
+        sample_id="SMP-0001",
+        applies_to_series_id=(
+            "SER-0001"
+        ),
+    )
+
+    assert (
+        result.mechanism_assessment
+        .mechanism_normalized
+        == MechanismLabel.Z_SCHEME
+    )
+
+    assert (
+        result.mechanism_assessment
+        .charge_transfer_class
+        is None
+    )
+
+    assert (
+        len(
+            result.mechanism_evidence
+        )
+        == 2
+    )
+
+    assert (
+        result.mechanism_evidence[
+            0
+        ].mechanism_assessment_id
+        == "MEA-0001"
+    )
+
+    assert (
+        result.mechanism_evidence[
+            1
+        ].mechanism_assessment_id
+        == "MEA-0001"
+    )
+
+
+# ---------------------------------------------------------------------------
+# EVIDENCE ID COUNT MUST MATCH
+# ---------------------------------------------------------------------------
+def test_evidence_id_count_must_match():
+    with pytest.raises(
+        ValueError,
+        match=(
+            "number of evidence IDs"
+        ),
+    ):
+        build_mechanism_records(
+            extraction_result=(
+                make_z_scheme_extraction_result()
+            ),
+            mechanism_assessment_id=(
+                "MEA-0001"
+            ),
+            evidence_ids=[
+                "EVD-0001",
+            ],
+            sample_id="SMP-0001",
+        )
+
+

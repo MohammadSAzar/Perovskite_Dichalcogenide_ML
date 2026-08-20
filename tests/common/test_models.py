@@ -3,17 +3,20 @@ import pytest
 from pydantic import ValidationError
 
 from psk_tmd.common.constants import (
+    CharacterizationRole,
     ChargeTransferClass,
+    DisagreementStatus,
+    DisagreementType,
+    EvidenceContextType,
     EvidenceStrength,
     EvidenceSupport,
     EvidenceType,
+    ExtractorType,
     FractionBasis,
     LabelStatus,
     MechanismLabel,
+    PaperSectionRole,
     PhotocatalyticApplication,
-    ExtractorType,
-    DisagreementStatus,
-    DisagreementType,
     ProvenanceOperation,
     SynthesisTopology,
 )
@@ -322,12 +325,348 @@ def test_mechanism_evidence_valid():
         evidence_type=EvidenceType.XPS,
         support=EvidenceSupport.SUPPORTS,
         evidence_strength=EvidenceStrength.MODERATE,
+        reported_result=(
+            "Binding-energy shifts indicate "
+            "interfacial electron redistribution."
+        ),
         source_location="Figure 6",
+        characterization_role=(
+            CharacterizationRole.MECHANISM_ASSESSMENT
+        ),
+        mechanism_discriminating=True,
+        requires_context=True,
+        required_context=[
+            EvidenceContextType.BAND_ALIGNMENT,
+        ],
+        section_role=(
+            PaperSectionRole.RESULTS
+        ),
+        section_title=(
+            "Results and discussion"
+        ),
+        page_number=6,
     )
 
-    assert evidence.evidence_type == EvidenceType.XPS
-    assert evidence.support == EvidenceSupport.SUPPORTS
-    assert evidence.source_location == "Figure 6"
+    assert (
+        evidence.evidence_type
+        == EvidenceType.XPS
+    )
+
+    assert (
+        evidence.support
+        == EvidenceSupport.SUPPORTS
+    )
+
+    assert (
+        evidence.evidence_strength
+        == EvidenceStrength.MODERATE
+    )
+
+    assert (
+        evidence.characterization_role
+        == CharacterizationRole.MECHANISM_ASSESSMENT
+    )
+
+    assert (
+        evidence.mechanism_discriminating
+        is True
+    )
+
+    assert (
+        evidence.requires_context
+        is True
+    )
+
+    assert (
+        evidence.required_context
+        == [
+            EvidenceContextType.BAND_ALIGNMENT,
+        ]
+    )
+
+    assert (
+        evidence.section_role
+        == PaperSectionRole.RESULTS
+    )
+
+    assert (
+        evidence.section_title
+        == "Results and discussion"
+    )
+
+    assert (
+        evidence.page_number
+        == 6
+    )
+
+    assert (
+        evidence.source_location
+        == "Figure 6"
+    )
+
+
+def test_mechanism_evidence_defaults():
+    evidence = MechanismEvidence(
+        evidence_id="EVD-000002",
+        mechanism_assessment_id="MEA-000001",
+    )
+
+    assert (
+        evidence.evidence_type
+        == EvidenceType.UNKNOWN
+    )
+
+    assert (
+        evidence.support
+        == EvidenceSupport.UNKNOWN
+    )
+
+    assert (
+        evidence.evidence_strength
+        == EvidenceStrength.UNKNOWN
+    )
+
+    assert (
+        evidence.characterization_role
+        == CharacterizationRole.OTHER
+    )
+
+    assert (
+        evidence.mechanism_discriminating
+        is False
+    )
+
+    assert (
+        evidence.requires_context
+        is False
+    )
+
+    assert (
+        evidence.required_context
+        == []
+    )
+
+    assert (
+        evidence.section_role
+        == PaperSectionRole.OTHER
+    )
+
+    assert (
+        evidence.section_title
+        is None
+    )
+
+    assert (
+        evidence.page_number
+        is None
+    )
+
+
+def test_mechanism_evidence_context_required_valid():
+    evidence = MechanismEvidence(
+        evidence_id="EVD-000003",
+        mechanism_assessment_id="MEA-000001",
+        evidence_type=(
+            EvidenceType.RADICAL_TRAPPING
+        ),
+        characterization_role=(
+            CharacterizationRole.MECHANISM_ASSESSMENT
+        ),
+        mechanism_discriminating=True,
+        requires_context=True,
+        required_context=[
+            EvidenceContextType.BAND_EDGES,
+            EvidenceContextType.REDOX_POTENTIALS,
+        ],
+        section_role=(
+            PaperSectionRole.MECHANISM
+        ),
+        section_title=(
+            "Possible photocatalytic mechanism"
+        ),
+        page_number=9,
+    )
+
+    assert (
+        evidence.requires_context
+        is True
+    )
+
+    assert (
+        EvidenceContextType.BAND_EDGES
+        in evidence.required_context
+    )
+
+    assert (
+        EvidenceContextType.REDOX_POTENTIALS
+        in evidence.required_context
+    )
+
+
+def test_mechanism_evidence_requires_context_cannot_be_empty():
+    with pytest.raises(
+        ValidationError,
+        match=(
+            "Evidence requiring context "
+            "must specify required_context"
+        ),
+    ):
+        MechanismEvidence(
+            evidence_id="EVD-000004",
+            mechanism_assessment_id=(
+                "MEA-000001"
+            ),
+            evidence_type=(
+                EvidenceType.RADICAL_TRAPPING
+            ),
+            characterization_role=(
+                CharacterizationRole.MECHANISM_ASSESSMENT
+            ),
+            mechanism_discriminating=True,
+            requires_context=True,
+            required_context=[],
+        )
+
+
+def test_mechanism_evidence_context_must_be_empty_when_not_required():
+    with pytest.raises(
+        ValidationError,
+        match=(
+            "required_context must be empty "
+            "when requires_context is False"
+        ),
+    ):
+        MechanismEvidence(
+            evidence_id="EVD-000005",
+            mechanism_assessment_id=(
+                "MEA-000001"
+            ),
+            evidence_type=(
+                EvidenceType.MOTT_SCHOTTKY
+            ),
+            characterization_role=(
+                CharacterizationRole.BAND_STRUCTURE
+            ),
+            mechanism_discriminating=False,
+            requires_context=False,
+            required_context=[
+                EvidenceContextType.BAND_EDGES,
+            ],
+        )
+
+
+def test_mechanism_evidence_page_number_must_be_positive():
+    with pytest.raises(
+        ValidationError,
+    ):
+        MechanismEvidence(
+            evidence_id="EVD-000006",
+            mechanism_assessment_id=(
+                "MEA-000001"
+            ),
+            page_number=0,
+        )
+
+
+def test_mechanism_evidence_band_structure_valid():
+    evidence = MechanismEvidence(
+        evidence_id="EVD-000007",
+        mechanism_assessment_id="MEA-000001",
+        evidence_type=(
+            EvidenceType.MOTT_SCHOTTKY
+        ),
+        characterization_role=(
+            CharacterizationRole.BAND_STRUCTURE
+        ),
+        mechanism_discriminating=False,
+        requires_context=False,
+        required_context=[],
+        reported_result=(
+            "Mott-Schottky analysis was used "
+            "to determine flat-band potentials."
+        ),
+        section_role=(
+            PaperSectionRole.RESULTS
+        ),
+        page_number=6,
+    )
+
+    assert (
+        evidence.characterization_role
+        == CharacterizationRole.BAND_STRUCTURE
+    )
+
+    assert (
+        evidence.mechanism_discriminating
+        is False
+    )
+
+    assert (
+        evidence.requires_context
+        is False
+    )
+
+    assert (
+        evidence.required_context
+        == []
+    )
+
+
+def test_mechanism_evidence_charge_separation_support_valid():
+    evidence = MechanismEvidence(
+        evidence_id="EVD-000008",
+        mechanism_assessment_id="MEA-000001",
+        evidence_type=(
+            EvidenceType.UNKNOWN
+        ),
+        evidence_subtype=(
+            "photoluminescence"
+        ),
+        characterization_role=(
+            CharacterizationRole.CHARGE_SEPARATION_SUPPORT
+        ),
+        mechanism_discriminating=False,
+        requires_context=False,
+        required_context=[],
+        reported_result=(
+            "Lower PL intensity indicates "
+            "reduced electron-hole recombination."
+        ),
+        section_role=(
+            PaperSectionRole.RESULTS
+        ),
+        page_number=6,
+    )
+
+    assert (
+        evidence.evidence_type
+        == EvidenceType.UNKNOWN
+    )
+
+    assert (
+        evidence.evidence_subtype
+        == "photoluminescence"
+    )
+
+    assert (
+        evidence.characterization_role
+        == CharacterizationRole.CHARGE_SEPARATION_SUPPORT
+    )
+
+    assert (
+        evidence.mechanism_discriminating
+        is False
+    )
+
+    assert (
+        evidence.requires_context
+        is False
+    )
+
+    assert (
+        evidence.required_context
+        == []
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -538,4 +877,5 @@ def test_disagreement_record_requires_reported_value():
             disagreement_type=DisagreementType.WITHIN_PAPER,
             reported_values=[],
         )
+
 

@@ -1,12 +1,18 @@
 from datetime import date
 
-from pydantic import BaseModel, Field
+from pydantic import (
+    BaseModel,
+    Field,
+    model_validator,
+)
 
 from psk_tmd.common.constants import (
     AccessType,
+    CharacterizationRole,
     ChargeTransferClass,
     DisagreementStatus,
     DisagreementType,
+    EvidenceContextType,
     EvidenceStrength,
     EvidenceSupport,
     EvidenceType,
@@ -15,6 +21,7 @@ from psk_tmd.common.constants import (
     LabelStatus,
     ManualReviewStatus,
     MechanismLabel,
+    PaperSectionRole,
     PhotocatalyticApplication,
     ProvenanceOperation,
     SynthesisTopology,
@@ -182,6 +189,57 @@ class MechanismEvidence(BaseModel):
     reported_result: str | None = None
     source_location: str | None = None
     notes: str | None = None
+
+    characterization_role: CharacterizationRole = (
+        CharacterizationRole.OTHER
+    )
+
+    mechanism_discriminating: bool = False
+
+    requires_context: bool = False
+
+    required_context: list[
+        EvidenceContextType
+    ] = Field(
+        default_factory=list,
+    )
+
+    section_role: PaperSectionRole = (
+        PaperSectionRole.OTHER
+    )
+
+    section_title: str | None = None
+
+    page_number: int | None = Field(
+        default=None,
+        ge=1,
+    )
+
+    @model_validator(
+        mode="after"
+    )
+    def validate_evidence_context(
+            self,
+    ) -> "MechanismEvidence":
+        if (
+                self.requires_context
+                and not self.required_context
+        ):
+            raise ValueError(
+                "Evidence requiring context "
+                "must specify required_context."
+            )
+
+        if (
+                not self.requires_context
+                and self.required_context
+        ):
+            raise ValueError(
+                "required_context must be empty "
+                "when requires_context is False."
+            )
+
+        return self
 
 
 # ---------------------------------------------------------------------------

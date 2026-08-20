@@ -54,6 +54,20 @@ class AccessType(str, Enum):
 
 
 # ---------------------------------------------------------------------------
+# PAPER SECTION ROLE
+# ---------------------------------------------------------------------------
+class PaperSectionRole(str, Enum):
+    ABSTRACT = "abstract"
+    INTRODUCTION = "introduction"
+    EXPERIMENTAL = "experimental"
+    RESULTS = "results"
+    MECHANISM = "mechanism"
+    CONCLUSION = "conclusion"
+    REFERENCES = "references"
+    OTHER = "other"
+
+
+# ---------------------------------------------------------------------------
 # EXPERIMENTAL SAMPLE METADATA
 # ---------------------------------------------------------------------------
 class FractionBasis(str, Enum):
@@ -128,6 +142,30 @@ class EvidenceType(str, Enum):
     KELVIN_PROBE = "kelvin_probe"
     OTHER = "other"
     UNKNOWN = "unknown"
+
+
+# ---------------------------------------------------------------------------
+# CHARACTERIZATION ROLE
+# ---------------------------------------------------------------------------
+class CharacterizationRole(str, Enum):
+    MECHANISM_ASSESSMENT = "mechanism_assessment"
+    BAND_STRUCTURE = "band_structure"
+    CHARGE_SEPARATION_SUPPORT = "charge_separation_support"
+    PERFORMANCE_SUPPORT = "performance_support"
+    STRUCTURAL_CHARACTERIZATION = "structural_characterization"
+    OTHER = "other"
+
+
+# ---------------------------------------------------------------------------
+# EVIDENCE CONTEXT TYPE
+# ---------------------------------------------------------------------------
+class EvidenceContextType(str, Enum):
+    BAND_ALIGNMENT = "band_alignment"
+    BAND_EDGES = "band_edges"
+    REDOX_POTENTIALS = "redox_potentials"
+    INTERFACIAL_CHARGE_DIRECTION = "interfacial_charge_direction"
+    ACTIVE_SPECIES = "active_species"
+    OTHER = "other"
 
 
 # ---------------------------------------------------------------------------
