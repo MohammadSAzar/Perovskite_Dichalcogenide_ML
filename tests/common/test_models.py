@@ -19,6 +19,7 @@ from psk_tmd.common.constants import (
     PhotocatalyticApplication,
     ProvenanceOperation,
     SynthesisTopology,
+    ManualReviewStatus,
 )
 
 from psk_tmd.common.models import (
@@ -27,6 +28,7 @@ from psk_tmd.common.models import (
     HeterostructureDescription,
     MechanismAssessment,
     MechanismEvidence,
+    PairRecord,
     PaperRecord,
     PhotocatalyticTest,
     PSKDescription,
@@ -34,6 +36,7 @@ from psk_tmd.common.models import (
     TMDDescription,
     DisagreementRecord,
     SampleSeries,
+    PairMechanismLabel,
 )
 
 
@@ -157,6 +160,77 @@ def test_heterostructure_description_valid():
 
     assert heterostructure.component_ratio_reported == "1:2"
     assert heterostructure.morphology == "2D/2D"
+
+
+# ---------------------------------------------------------------------------
+# PSK-TMD PAIRS
+# ---------------------------------------------------------------------------
+def test_pair_record_valid():
+    pair = PairRecord(
+        pair_id="PAIR-000001",
+        psk_formula_reported="LaNiO3",
+        psk_formula_normalized="LaNiO3",
+        tmd_formula_reported="WS2",
+        tmd_formula_normalized="WS2",
+    )
+
+    assert pair.pair_id == "PAIR-000001"
+
+    assert (
+        pair.psk_formula_normalized
+        == "LaNiO3"
+    )
+
+    assert (
+        pair.tmd_formula_normalized
+        == "WS2"
+    )
+
+
+def test_pair_record_preserves_doped_compositions():
+    pair = PairRecord(
+        pair_id="PAIR-000002",
+        psk_formula_reported=(
+            "La0.8Sr0.2FeO3"
+        ),
+        psk_formula_normalized=(
+            "La0.8Sr0.2FeO3"
+        ),
+        tmd_formula_reported=(
+            "MoS1.8Se0.2"
+        ),
+        tmd_formula_normalized=(
+            "MoS1.8Se0.2"
+        ),
+    )
+
+    assert (
+        pair.psk_formula_normalized
+        == "La0.8Sr0.2FeO3"
+    )
+
+    assert (
+        pair.tmd_formula_normalized
+        == "MoS1.8Se0.2"
+    )
+
+
+def test_pair_record_does_not_require_normalized_formulas():
+    pair = PairRecord(
+        pair_id="PAIR-000003",
+        psk_formula_reported="CaTiO3",
+        tmd_formula_reported="MoS2",
+    )
+
+    assert (
+        pair.psk_formula_normalized
+        is None
+    )
+
+    assert (
+        pair.tmd_formula_normalized
+        is None
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -878,4 +952,113 @@ def test_disagreement_record_requires_reported_value():
             reported_values=[],
         )
 
+
+# ---------------------------------------------------------------------------
+# VALID PAIR MECHANISM LABEL
+# ---------------------------------------------------------------------------
+def test_valid_pair_mechanism_label():
+    label = PairMechanismLabel(
+        pair_id="PAIR-0001",
+        source_assessment_ids=[
+            "MEA-0001",
+        ],
+        mechanism_normalized=(
+            MechanismLabel.Z_SCHEME
+        ),
+        charge_transfer_class=(
+            ChargeTransferClass
+            .MEDIATED_RECOMBINATION
+        ),
+        has_disagreement=False,
+    )
+
+    assert (
+        label.pair_id
+        == "PAIR-0001"
+    )
+
+    assert (
+        label.source_assessment_ids
+        == [
+            "MEA-0001"
+        ]
+    )
+
+    assert (
+        label.mechanism_normalized
+        == MechanismLabel.Z_SCHEME
+    )
+
+    assert (
+        label.charge_transfer_class
+        == (
+            ChargeTransferClass
+            .MEDIATED_RECOMBINATION
+        )
+    )
+
+    assert (
+        label.has_disagreement
+        is False
+    )
+
+
+# ---------------------------------------------------------------------------
+# PAIR LABEL DEFAULTS TO PENDING REVIEW
+# ---------------------------------------------------------------------------
+def test_pair_mechanism_label_defaults_to_pending_review():
+    label = PairMechanismLabel(
+        pair_id="PAIR-0001",
+    )
+
+    assert (
+        label.manual_review_status
+        == ManualReviewStatus.PENDING
+    )
+
+    assert (
+        label.label_status
+        == LabelStatus.PENDING_REVIEW
+    )
+
+    assert (
+        label.mechanism_normalized
+        is None
+    )
+
+    assert (
+        label.charge_transfer_class
+        is None
+    )
+
+
+# ---------------------------------------------------------------------------
+# PAIR LABEL CAN PRESERVE DISAGREEMENT
+# ---------------------------------------------------------------------------
+def test_pair_mechanism_label_can_preserve_disagreement():
+    label = PairMechanismLabel(
+        pair_id="PAIR-0001",
+        source_assessment_ids=[
+            "MEA-0001",
+            "MEA-0002",
+        ],
+        mechanism_normalized=None,
+        charge_transfer_class=None,
+        has_disagreement=True,
+    )
+
+    assert (
+        label.has_disagreement
+        is True
+    )
+
+    assert (
+        label.mechanism_normalized
+        is None
+    )
+
+    assert (
+        label.charge_transfer_class
+        is None
+    )
 

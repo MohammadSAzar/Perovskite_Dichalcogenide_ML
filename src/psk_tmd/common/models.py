@@ -109,6 +109,54 @@ class HeterostructureDescription(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# PSK-TMD PAIRS
+# ---------------------------------------------------------------------------
+class PairRecord(BaseModel):
+    pair_id: str
+
+    psk_formula_reported: str
+    psk_formula_normalized: str | None = None
+
+    tmd_formula_reported: str
+    tmd_formula_normalized: str | None = None
+
+    notes: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# PAIR MECHANISM LABEL
+# ---------------------------------------------------------------------------
+class PairMechanismLabel(BaseModel):
+    pair_id: str
+
+    source_assessment_ids: list[
+        str
+    ] = Field(
+        default_factory=list,
+    )
+
+    mechanism_normalized: (
+        MechanismLabel | None
+    ) = None
+
+    charge_transfer_class: (
+        ChargeTransferClass | None
+    ) = None
+
+    has_disagreement: bool = False
+
+    manual_review_status: (
+        ManualReviewStatus
+    ) = ManualReviewStatus.PENDING
+
+    label_status: LabelStatus = (
+        LabelStatus.PENDING_REVIEW
+    )
+
+    reviewer_notes: str | None = None
+
+
+# ---------------------------------------------------------------------------
 # EXPERIMENTAL SAMPLES
 # ---------------------------------------------------------------------------
 class SampleSeries(BaseModel):
@@ -136,7 +184,6 @@ class ExperimentalSample(BaseModel):
     tmd_fraction: float | None = Field(default=None, ge=0)
     fraction_basis: FractionBasis | None = None
 
-    is_reference_sample: bool = False
     notes: str | None = None
 
 
@@ -344,5 +391,4 @@ class DisagreementRecord(BaseModel):
 
     description: str | None = None
     resolution_notes: str | None = None
-
 

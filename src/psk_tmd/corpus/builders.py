@@ -4,6 +4,8 @@ from psk_tmd.common.constants import (
     EvidenceStrength,
     EvidenceSupport,
     EvidenceType,
+    LabelStatus,
+    ManualReviewStatus,
     MechanismLabel,
 )
 from psk_tmd.corpus.extraction import (
@@ -13,7 +15,42 @@ from psk_tmd.corpus.extraction import (
 from psk_tmd.common.models import (
     MechanismAssessment,
     MechanismEvidence,
+    PairMechanismLabel,
+    PairRecord,
 )
+from psk_tmd.corpus.pair_extraction import PairExtractionResult
+from psk_tmd.corpus.mechanism_aggregation import PairMechanismAggregationResult
+
+
+# ---------------------------------------------------------------------------
+# BUILD PAIR RECORD
+# ---------------------------------------------------------------------------
+def build_pair_record(
+    extraction_result: PairExtractionResult,
+    pair_id: str,
+) -> PairRecord | None:
+    candidate = (
+        extraction_result
+        .primary_pair_candidate
+    )
+
+    if candidate is None:
+        return None
+
+    return PairRecord(
+        pair_id=pair_id,
+        psk_formula_reported=(
+            candidate
+            .psk_formula_reported
+        ),
+        psk_formula_normalized=None,
+        tmd_formula_reported=(
+            candidate
+            .tmd_formula_reported
+        ),
+        tmd_formula_normalized=None,
+        notes=None,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -207,6 +244,42 @@ def build_mechanism_evidence(
 
 
 # ---------------------------------------------------------------------------
+# BUILD PAIR MECHANISM LABEL
+# ---------------------------------------------------------------------------
+def build_pair_mechanism_label(
+    aggregation_result: PairMechanismAggregationResult,
+) -> PairMechanismLabel:
+    return PairMechanismLabel(
+        pair_id=(
+            aggregation_result.pair_id
+        ),
+        source_assessment_ids=(
+            aggregation_result
+            .assessment_ids
+        ),
+        mechanism_normalized=(
+            aggregation_result
+            .mechanism_consensus
+        ),
+        charge_transfer_class=(
+            aggregation_result
+            .charge_transfer_consensus
+        ),
+        has_disagreement=(
+            aggregation_result
+            .has_disagreement
+        ),
+        manual_review_status=(
+            ManualReviewStatus.PENDING
+        ),
+        label_status=(
+            LabelStatus.PENDING_REVIEW
+        ),
+        reviewer_notes=None,
+    )
+
+
+# ---------------------------------------------------------------------------
 # BUILD MECHANISM RECORDS
 # ---------------------------------------------------------------------------
 def build_mechanism_records(
@@ -269,5 +342,4 @@ def build_mechanism_records(
             mechanism_evidence
         ),
     )
-
 
