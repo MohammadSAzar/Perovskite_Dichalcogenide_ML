@@ -234,3 +234,36 @@ class DisagreementStatus(str, Enum):
     CURATOR_RESOLVED = "curator_resolved"
     SOURCE_ERROR = "source_error"
 
+
+# ---------------------------------------------------------------------------
+# BAND AND ELECTRONIC PROPERTIES
+# ---------------------------------------------------------------------------
+class BandGapType(str, Enum):
+    DIRECT = "direct"
+    INDIRECT = "indirect"
+    UNKNOWN = "unknown"
+
+
+class BandClaimContext(str, Enum):
+    CURRENT_WORK = "current_work"
+    PRIOR_LITERATURE = "prior_literature"
+    AMBIGUOUS = "ambiguous"
+
+
+class BandReferenceScale(str, Enum):
+    NHE = "nhe"
+    SHE = "she"
+    RHE = "rhe"
+    AG_AGCL = "ag_agcl"
+    SCE = "sce"
+    VACUUM = "vacuum"
+    OTHER = "other"
+    UNKNOWN = "unknown"
+
+
+class ElectronegativityValueStatus(str, Enum):
+    TABULATED = "tabulated"
+    DERIVED_IE_EA = "derived_ie_ea"
+    ESTIMATED = "estimated"
+    UNAVAILABLE = "unavailable"
+

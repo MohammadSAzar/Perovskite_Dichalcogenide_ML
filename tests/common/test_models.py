@@ -20,6 +20,10 @@ from psk_tmd.common.constants import (
     ProvenanceOperation,
     SynthesisTopology,
     ManualReviewStatus,
+    BandClaimContext,
+    BandGapType,
+    BandReferenceScale,
+    ElectronegativityValueStatus, MaterialType,
 )
 
 from psk_tmd.common.models import (
@@ -37,6 +41,9 @@ from psk_tmd.common.models import (
     DisagreementRecord,
     SampleSeries,
     PairMechanismLabel,
+    PairBandAlignmentRecord,
+    MaterialBandRecord,
+    ElementElectronegativityRecord,
 )
 
 
@@ -1061,4 +1068,245 @@ def test_pair_mechanism_label_can_preserve_disagreement():
         label.charge_transfer_class
         is None
     )
+
+
+# ---------------------------------------------------------------------------
+# ELEMENT ELECTRONEGATIVITY RECORD
+# ---------------------------------------------------------------------------
+def test_element_electronegativity_record():
+    record = ElementElectronegativityRecord(
+        element_symbol="Ti",
+        absolute_electronegativity_ev=3.45,
+        value_status=(
+            ElectronegativityValueStatus
+            .DERIVED_IE_EA
+        ),
+        ionization_energy_ev=6.82,
+        electron_affinity_ev=0.08,
+        source_name="test_source",
+    )
+
+    assert (
+        record.element_symbol
+        == "Ti"
+    )
+
+    assert (
+        record.value_status
+        == (
+            ElectronegativityValueStatus
+            .DERIVED_IE_EA
+        )
+    )
+
+    assert (
+        record.absolute_electronegativity_ev
+        == 3.45
+    )
+
+
+# ---------------------------------------------------------------------------
+# UNAVAILABLE ELECTRONEGATIVITY
+# ---------------------------------------------------------------------------
+def test_unavailable_electronegativity():
+    record = ElementElectronegativityRecord(
+        element_symbol="La",
+    )
+
+    assert (
+        record.absolute_electronegativity_ev
+        is None
+    )
+
+    assert (
+        record.value_status
+        == (
+            ElectronegativityValueStatus
+            .UNAVAILABLE
+        )
+    )
+
+
+# ---------------------------------------------------------------------------
+# MATERIAL BAND RECORD
+# ---------------------------------------------------------------------------
+def test_material_band_record():
+    record = MaterialBandRecord(
+        band_record_id="BND-0001",
+        paper_id="PPR-0001",
+        pair_id="PAIR-0001",
+        material_type=MaterialType.PSK,
+        formula_reported="CaTiO3",
+        reported_band_gap_ev=3.40,
+        band_gap_type=BandGapType.INDIRECT,
+        band_gap_method="Tauc plot",
+        reported_cbm=-0.50,
+        reported_vbm=2.90,
+        reported_reference_scale=(
+            BandReferenceScale.NHE
+        ),
+        reported_cbm_nhe_v=-0.50,
+        reported_vbm_nhe_v=2.90,
+        absolute_electronegativity_ev=5.60,
+        calculated_cbm_nhe_v=-0.60,
+        calculated_vbm_nhe_v=2.80,
+        claim_context=(
+            BandClaimContext.CURRENT_WORK
+        ),
+    )
+
+    assert (
+        record.material_type
+        == MaterialType.PSK
+    )
+
+    assert (
+        record.reported_band_gap_ev
+        == 3.40
+    )
+
+    assert (
+        record.reported_cbm_nhe_v
+        == -0.50
+    )
+
+    assert (
+        record.calculated_cbm_nhe_v
+        == -0.60
+    )
+
+
+# ---------------------------------------------------------------------------
+# MATERIAL BAND RECORD DEFAULTS
+# ---------------------------------------------------------------------------
+def test_material_band_record_defaults():
+    record = MaterialBandRecord(
+        band_record_id="BND-0002",
+        paper_id="PPR-0001",
+        pair_id="PAIR-0001",
+        material_type=MaterialType.TMD,
+        formula_reported="MoS2",
+    )
+
+    assert (
+        record.band_gap_type
+        == BandGapType.UNKNOWN
+    )
+
+    assert (
+        record.reported_reference_scale
+        == BandReferenceScale.UNKNOWN
+    )
+
+    assert (
+        record.claim_context
+        == BandClaimContext.AMBIGUOUS
+    )
+
+    assert (
+        record.calculated_cbm_nhe_v
+        is None
+    )
+
+
+# ---------------------------------------------------------------------------
+# PAIR BAND ALIGNMENT RECORD
+# ---------------------------------------------------------------------------
+def test_pair_band_alignment_record():
+    record = PairBandAlignmentRecord(
+        band_alignment_id="BAL-0001",
+        pair_id="PAIR-0001",
+        oxidation_band_record_id=(
+            "BND-0001"
+        ),
+        reduction_band_record_id=(
+            "BND-0002"
+        ),
+        oxidation_material_type=(
+            MaterialType.PSK
+        ),
+        reduction_material_type=(
+            MaterialType.TMD
+        ),
+        oxidation_formula="CaTiO3",
+        reduction_formula="MoS2",
+        oxidation_cbm_nhe_v=-0.60,
+        reduction_vbm_nhe_v=1.80,
+        mediated_band_difference_nhe_v=(
+            -2.40
+        ),
+        role_assignment_basis=(
+            "Curated mechanism assignment"
+        ),
+    )
+
+    assert (
+        record.mediated_band_difference_nhe_v
+        == -2.40
+    )
+
+    assert (
+        record.oxidation_material_type
+        == MaterialType.PSK
+    )
+
+    assert (
+        record.reduction_material_type
+        == MaterialType.TMD
+    )
+
+    assert (
+        record.manual_review_status
+        == ManualReviewStatus.PENDING
+    )
+
+
+# ---------------------------------------------------------------------------
+# CHEMICAL POTENTIAL ELECTRONEGATIVITY RELATION
+# ---------------------------------------------------------------------------
+def test_chemical_potential_electronegativity_relation():
+    record = ElementElectronegativityRecord(
+        element_symbol="Pr",
+        chemical_potential_ev=-3.22,
+        absolute_electronegativity_ev=3.22,
+        value_status=(
+            ElectronegativityValueStatus
+            .ESTIMATED
+        ),
+        source_name="Cardenas 2016",
+    )
+
+    assert (
+        record.chemical_potential_ev
+        == -3.22
+    )
+
+    assert (
+        record.absolute_electronegativity_ev
+        == 3.22
+    )
+
+
+# ---------------------------------------------------------------------------
+# INVALID CHEMICAL POTENTIAL RELATION FAILS
+# ---------------------------------------------------------------------------
+def test_invalid_chemical_potential_relation_fails():
+    with pytest.raises(
+        ValueError,
+        match=(
+            "must equal "
+            "-chemical_potential_ev"
+        ),
+    ):
+        ElementElectronegativityRecord(
+            element_symbol="Pr",
+            chemical_potential_ev=-3.22,
+            absolute_electronegativity_ev=(
+                3.50
+            ),
+            value_status=(
+                ElectronegativityValueStatus
+                .ESTIMATED
+            ),
+        )
 

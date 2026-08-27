@@ -25,6 +25,10 @@ from psk_tmd.common.constants import (
     PhotocatalyticApplication,
     ProvenanceOperation,
     SynthesisTopology,
+    BandClaimContext,
+    BandGapType,
+    BandReferenceScale,
+    ElectronegativityValueStatus, MaterialType,
 )
 
 
@@ -154,6 +158,173 @@ class PairMechanismLabel(BaseModel):
     )
 
     reviewer_notes: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# ELEMENT ELECTRONEGATIVITY
+# ---------------------------------------------------------------------------
+class ElementElectronegativityRecord(BaseModel):
+    element_symbol: str
+
+    chemical_potential_ev: (
+        float | None
+    ) = None
+
+    absolute_electronegativity_ev: (
+        float | None
+    ) = None
+
+    value_status: (
+        ElectronegativityValueStatus
+    ) = ElectronegativityValueStatus.UNAVAILABLE
+
+    ionization_energy_ev: (
+        float | None
+    ) = Field(
+        default=None,
+        ge=0.0,
+    )
+
+    electron_affinity_ev: (
+        float | None
+    ) = None
+
+    source_name: str | None = None
+    source_reference: str | None = None
+
+    estimation_method: str | None = None
+    notes: str | None = None
+
+    @model_validator(
+        mode="after"
+    )
+    def validate_chemical_potential_relation(
+        self,
+    ) -> "ElementElectronegativityRecord":
+        if (
+            self.chemical_potential_ev
+            is not None
+            and self.absolute_electronegativity_ev
+            is not None
+        ):
+            expected = (
+                -self.chemical_potential_ev
+            )
+
+            if abs(
+                self.absolute_electronegativity_ev
+                - expected
+            ) > 1e-8:
+                raise ValueError(
+                    "absolute_electronegativity_ev "
+                    "must equal "
+                    "-chemical_potential_ev."
+                )
+
+        return self
+
+
+# ---------------------------------------------------------------------------
+# MATERIAL BAND PROPERTIES
+# ---------------------------------------------------------------------------
+class MaterialBandRecord(BaseModel):
+    band_record_id: str
+    paper_id: str
+    pair_id: str
+
+    material_type: MaterialType
+
+    formula_reported: str
+    formula_normalized: str | None = None
+
+    reported_band_gap_ev: (
+        float | None
+    ) = Field(
+        default=None,
+        ge=0.0,
+    )
+
+    band_gap_type: BandGapType = (
+        BandGapType.UNKNOWN
+    )
+
+    band_gap_method: str | None = None
+
+    reported_cbm: float | None = None
+    reported_vbm: float | None = None
+
+    reported_reference_scale: (
+        BandReferenceScale
+    ) = BandReferenceScale.UNKNOWN
+
+    reported_reference_detail: (
+        str | None
+    ) = None
+
+    reported_ph: float | None = None
+
+    reported_cbm_nhe_v: (
+        float | None
+    ) = None
+
+    reported_vbm_nhe_v: (
+        float | None
+    ) = None
+
+    absolute_electronegativity_ev: (
+        float | None
+    ) = None
+
+    calculated_cbm_nhe_v: (
+        float | None
+    ) = None
+
+    calculated_vbm_nhe_v: (
+        float | None
+    ) = None
+
+    claim_context: BandClaimContext = (
+        BandClaimContext.AMBIGUOUS
+    )
+
+    source_location: str | None = None
+    source_text: str | None = None
+
+    manual_review_status: (
+        ManualReviewStatus
+    ) = ManualReviewStatus.PENDING
+
+    notes: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# PAIR BAND ALIGNMENT
+# ---------------------------------------------------------------------------
+class PairBandAlignmentRecord(BaseModel):
+    band_alignment_id: str
+    pair_id: str
+
+    oxidation_band_record_id: str
+    reduction_band_record_id: str
+
+    oxidation_material_type: MaterialType
+    reduction_material_type: MaterialType
+
+    oxidation_formula: str
+    reduction_formula: str
+
+    oxidation_cbm_nhe_v: float
+    reduction_vbm_nhe_v: float
+
+    mediated_band_difference_nhe_v: float
+
+    role_assignment_basis: str | None = None
+
+    manual_review_status: (
+        ManualReviewStatus
+    ) = ManualReviewStatus.PENDING
+
+    notes: str | None = None
 
 
 # ---------------------------------------------------------------------------

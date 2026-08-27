@@ -17,6 +17,10 @@ from psk_tmd.common.constants import (
     ProvenanceOperation,
     DisagreementType,
     DisagreementStatus,
+    BandClaimContext,
+    BandGapType,
+    BandReferenceScale,
+    ElectronegativityValueStatus,
 )
 
 
@@ -205,4 +209,78 @@ def test_disagreement_status_values():
         == "curator_resolved"
     )
     assert DisagreementStatus.SOURCE_ERROR.value == "source_error"
+
+
+# ---------------------------------------------------------------------------
+# BAND GAP TYPE VALUES
+# ---------------------------------------------------------------------------
+def test_band_gap_type_values():
+    assert BandGapType.DIRECT.value == "direct"
+    assert BandGapType.INDIRECT.value == "indirect"
+    assert BandGapType.UNKNOWN.value == "unknown"
+
+
+# ---------------------------------------------------------------------------
+# BAND CLAIM CONTEXT VALUES
+# ---------------------------------------------------------------------------
+def test_band_claim_context_values():
+    assert (
+        BandClaimContext.CURRENT_WORK.value
+        == "current_work"
+    )
+
+    assert (
+        BandClaimContext.PRIOR_LITERATURE.value
+        == "prior_literature"
+    )
+
+    assert (
+        BandClaimContext.AMBIGUOUS.value
+        == "ambiguous"
+    )
+
+
+# ---------------------------------------------------------------------------
+# BAND REFERENCE SCALE VALUES
+# ---------------------------------------------------------------------------
+def test_band_reference_scale_values():
+    assert (
+        BandReferenceScale.NHE.value
+        == "nhe"
+    )
+
+    assert (
+        BandReferenceScale.AG_AGCL.value
+        == "ag_agcl"
+    )
+
+    assert (
+        BandReferenceScale.VACUUM.value
+        == "vacuum"
+    )
+
+
+# ---------------------------------------------------------------------------
+# ELECTRONEGATIVITY VALUE STATUS
+# ---------------------------------------------------------------------------
+def test_electronegativity_value_status_values():
+    assert (
+        ElectronegativityValueStatus.TABULATED.value
+        == "tabulated"
+    )
+
+    assert (
+        ElectronegativityValueStatus.DERIVED_IE_EA.value
+        == "derived_ie_ea"
+    )
+
+    assert (
+        ElectronegativityValueStatus.ESTIMATED.value
+        == "estimated"
+    )
+
+    assert (
+        ElectronegativityValueStatus.UNAVAILABLE.value
+        == "unavailable"
+    )
 
