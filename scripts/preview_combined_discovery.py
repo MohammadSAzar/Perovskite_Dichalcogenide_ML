@@ -7,6 +7,9 @@ from psk_tmd.corpus.discovery.deduplication import (
 from psk_tmd.corpus.discovery.openalex import (
     discover_openalex_records,
 )
+from psk_tmd.corpus.discovery.screening import (
+    screen_discovery_record,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -130,10 +133,27 @@ def main() -> None:
         "MERGED RECORDS"
     )
     print(
-        "-" * 120
+        "-" * 130
     )
 
+    passed_count = 0
+
     for record in merged_records:
+        screening = (
+            screen_discovery_record(
+                record
+            )
+        )
+
+        if screening.passes_screen:
+            passed_count += 1
+
+        screen_text = (
+            "PASS"
+            if screening.passes_screen
+            else "FAIL"
+        )
+
         oa_text = (
             "OA"
             if record.is_open_access
@@ -148,15 +168,21 @@ def main() -> None:
 
         print(
             f"{record.discovery_id:<12} "
+            f"{screen_text:<6} "
             f"{record.year!s:<6} "
             f"{oa_text:<8} "
             f"{record.source:<20} "
             f"{record.doi or '-':<35} "
-            f"{record.title[:55]}"
+            f"{record.title[:50]}"
         )
 
     print(
-        "-" * 120
+        "-" * 130
+    )
+
+    print(
+        f"screen_passed="
+        f"{passed_count}"
     )
 
 
