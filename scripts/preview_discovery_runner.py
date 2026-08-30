@@ -15,6 +15,9 @@ from psk_tmd.corpus.discovery.runner import (
 from psk_tmd.corpus.discovery.candidates import (
     build_discovery_candidates,
 )
+from psk_tmd.corpus.discovery.screening import (
+    screen_discovery_record,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -54,6 +57,28 @@ def main() -> None:
             result.hits
         )
     )
+
+    screened_candidates = [
+        (
+            candidate,
+            screen_discovery_record(
+                candidate.record
+            ),
+        )
+        for candidate in candidates
+    ]
+
+    passed_candidates = [
+        (
+            candidate,
+            screening,
+        )
+        for (
+            candidate,
+            screening,
+        ) in screened_candidates
+        if screening.passes_screen
+    ]
 
     source_counts = Counter(
         hit.source
@@ -102,8 +127,123 @@ def main() -> None:
     print(
         "UNIQUE DISCOVERY CANDIDATES"
     )
+
     print(
         "-" * 140
+    )
+
+    print()
+
+    print(
+        "METADATA SCREENING"
+    )
+    print(
+        "-" * 150
+    )
+
+    for (
+        candidate,
+        screening,
+    ) in screened_candidates:
+        record = (
+            candidate.record
+        )
+
+        screen_text = (
+            "PASS"
+            if screening.passes_screen
+            else "FAIL"
+        )
+
+        signal_text = (
+            f"PSK="
+            f"{int(screening.has_perovskite_signal)} "
+            f"TMD="
+            f"{int(screening.has_tmd_signal)} "
+            f"PHOTO="
+            f"{int(screening.has_photo_signal)}"
+        )
+
+        print(
+            f"{candidate.candidate_id:<12} "
+            f"{screen_text:<6} "
+            f"{signal_text:<22} "
+            f"hits={candidate.hit_count:<2} "
+            f"{record.doi or '-':<35} "
+            f"{record.title[:60]}"
+        )
+
+    print(
+        "-" * 150
+    )
+
+    print(
+        f"screened_candidates="
+        f"{len(screened_candidates)}"
+    )
+
+    print(
+        f"screen_passed="
+        f"{len(passed_candidates)}"
+    )
+
+    print()
+
+    print(
+        "PASSED CANDIDATES"
+    )
+    print(
+        "-" * 150
+    )
+
+    if not passed_candidates:
+        print(
+            "None"
+        )
+
+    for (
+        candidate,
+        screening,
+    ) in passed_candidates:
+        record = (
+            candidate.record
+        )
+
+        print(
+            f"{candidate.candidate_id:<12} "
+            f"hits={candidate.hit_count:<2} "
+            f"queries={len(candidate.query_ids):<2} "
+            f"sources={','.join(candidate.sources):<20} "
+            f"{record.doi or '-':<35} "
+            f"{record.title[:65]}"
+        )
+
+        print(
+            f"{'':12} "
+            f"PSK terms="
+            f"{screening.matched_perovskite_terms}"
+        )
+
+        print(
+            f"{'':12} "
+            f"PSK formulas="
+            f"{screening.matched_perovskite_formulas}"
+        )
+
+        print(
+            f"{'':12} "
+            f"TMD terms="
+            f"{screening.matched_tmd_terms}"
+        )
+
+        print(
+            f"{'':12} "
+            f"PHOTO terms="
+            f"{screening.matched_photo_terms}"
+        )
+
+    print(
+        "-" * 150
     )
 
     for candidate in candidates:
