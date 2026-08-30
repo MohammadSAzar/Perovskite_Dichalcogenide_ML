@@ -2,6 +2,9 @@ from collections import (
     Counter,
 )
 
+from psk_tmd.corpus.discovery.candidates import (
+    build_discovery_candidates,
+)
 from psk_tmd.corpus.discovery.execution_plan import (
     build_execution_plan,
     select_pilot_queries,
@@ -12,12 +15,93 @@ from psk_tmd.corpus.discovery.query_strategy import (
 from psk_tmd.corpus.discovery.runner import (
     run_discovery_plan,
 )
-from psk_tmd.corpus.discovery.candidates import (
-    build_discovery_candidates,
-)
 from psk_tmd.corpus.discovery.screening import (
+    DiscoveryScreeningStatus,
     screen_discovery_record,
 )
+
+
+# ---------------------------------------------------------------------------
+# FORMAT OA STATUS
+# ---------------------------------------------------------------------------
+def format_oa_status(
+    value: bool | None,
+) -> str:
+    if value is True:
+        return "OA"
+
+    if value is False:
+        return "CLOSED"
+
+    return "UNKNOWN"
+
+
+# ---------------------------------------------------------------------------
+# PRINT CANDIDATE DETAILS
+# ---------------------------------------------------------------------------
+def print_screened_candidate_details(
+    candidate,
+    screening,
+) -> None:
+    record = candidate.record
+
+    print(
+        f"{candidate.candidate_id:<12} "
+        f"{screening.status.value.upper():<7} "
+        f"hits={candidate.hit_count:<2} "
+        f"queries={len(candidate.query_ids):<2} "
+        f"sources={','.join(candidate.sources):<20} "
+        f"{record.doi or '-':<35} "
+        f"{record.title[:65]}"
+    )
+
+    print(
+        f"{'':12} "
+        f"PSK terms="
+        f"{screening.matched_perovskite_terms}"
+    )
+
+    print(
+        f"{'':12} "
+        f"PSK formulas="
+        f"{screening.matched_perovskite_formulas}"
+    )
+
+    print(
+        f"{'':12} "
+        f"oxide terms="
+        f"{screening.matched_oxide_perovskite_terms}"
+    )
+
+    print(
+        f"{'':12} "
+        f"halide terms="
+        f"{screening.matched_halide_perovskite_terms}"
+    )
+
+    print(
+        f"{'':12} "
+        f"halide formulas="
+        f"{screening.matched_halide_perovskite_formulas}"
+    )
+
+    print(
+        f"{'':12} "
+        f"TMD terms="
+        f"{screening.matched_tmd_terms}"
+    )
+
+    print(
+        f"{'':12} "
+        f"PHOTO terms="
+        f"{screening.matched_photo_terms}"
+    )
+
+    print(
+        f"{'':12} "
+        f"reason="
+        f"{screening.reason}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -77,7 +161,40 @@ def main() -> None:
             candidate,
             screening,
         ) in screened_candidates
-        if screening.passes_screen
+        if (
+            screening.status
+            == DiscoveryScreeningStatus.PASS
+        )
+    ]
+
+    review_candidates = [
+        (
+            candidate,
+            screening,
+        )
+        for (
+            candidate,
+            screening,
+        ) in screened_candidates
+        if (
+            screening.status
+            == DiscoveryScreeningStatus.REVIEW
+        )
+    ]
+
+    rejected_candidates = [
+        (
+            candidate,
+            screening,
+        )
+        for (
+            candidate,
+            screening,
+        ) in screened_candidates
+        if (
+            screening.status
+            == DiscoveryScreeningStatus.REJECT
+        )
     ]
 
     source_counts = Counter(
@@ -94,7 +211,7 @@ def main() -> None:
         "DISCOVERY RUNNER LIVE PREVIEW"
     )
     print(
-        "=" * 130
+        "=" * 150
     )
 
     print(
@@ -122,14 +239,9 @@ def main() -> None:
         f"{len(result.hits)}"
     )
 
-    print()
-
     print(
-        "UNIQUE DISCOVERY CANDIDATES"
-    )
-
-    print(
-        "-" * 140
+        f"unique_candidates="
+        f"{len(candidates)}"
     )
 
     print()
@@ -145,19 +257,15 @@ def main() -> None:
         candidate,
         screening,
     ) in screened_candidates:
-        record = (
-            candidate.record
-        )
-
-        screen_text = (
-            "PASS"
-            if screening.passes_screen
-            else "FAIL"
-        )
+        record = candidate.record
 
         signal_text = (
             f"PSK="
             f"{int(screening.has_perovskite_signal)} "
+            f"OXIDE="
+            f"{int(screening.has_oxide_perovskite_signal)} "
+            f"HALIDE="
+            f"{int(screening.has_halide_perovskite_signal)} "
             f"TMD="
             f"{int(screening.has_tmd_signal)} "
             f"PHOTO="
@@ -166,11 +274,17 @@ def main() -> None:
 
         print(
             f"{candidate.candidate_id:<12} "
-            f"{screen_text:<6} "
-            f"{signal_text:<22} "
+            f"{screening.status.value.upper():<7} "
+            f"{signal_text:<38} "
             f"hits={candidate.hit_count:<2} "
             f"{record.doi or '-':<35} "
-            f"{record.title[:60]}"
+            f"{record.title[:50]}"
+        )
+
+        print(
+            f"{'':12} "
+            f"reason="
+            f"{screening.reason}"
         )
 
     print(
@@ -185,6 +299,16 @@ def main() -> None:
     print(
         f"screen_passed="
         f"{len(passed_candidates)}"
+    )
+
+    print(
+        f"screen_review="
+        f"{len(review_candidates)}"
+    )
+
+    print(
+        f"screen_rejected="
+        f"{len(rejected_candidates)}"
     )
 
     print()
@@ -205,51 +329,53 @@ def main() -> None:
         candidate,
         screening,
     ) in passed_candidates:
-        record = (
-            candidate.record
-        )
-
-        print(
-            f"{candidate.candidate_id:<12} "
-            f"hits={candidate.hit_count:<2} "
-            f"queries={len(candidate.query_ids):<2} "
-            f"sources={','.join(candidate.sources):<20} "
-            f"{record.doi or '-':<35} "
-            f"{record.title[:65]}"
-        )
-
-        print(
-            f"{'':12} "
-            f"PSK terms="
-            f"{screening.matched_perovskite_terms}"
-        )
-
-        print(
-            f"{'':12} "
-            f"PSK formulas="
-            f"{screening.matched_perovskite_formulas}"
-        )
-
-        print(
-            f"{'':12} "
-            f"TMD terms="
-            f"{screening.matched_tmd_terms}"
-        )
-
-        print(
-            f"{'':12} "
-            f"PHOTO terms="
-            f"{screening.matched_photo_terms}"
+        print_screened_candidate_details(
+            candidate,
+            screening,
         )
 
     print(
         "-" * 150
     )
 
-    for candidate in candidates:
-        record = (
-            candidate.record
+    print()
+
+    print(
+        "REVIEW CANDIDATES"
+    )
+    print(
+        "-" * 150
+    )
+
+    if not review_candidates:
+        print(
+            "None"
         )
+
+    for (
+        candidate,
+        screening,
+    ) in review_candidates:
+        print_screened_candidate_details(
+            candidate,
+            screening,
+        )
+
+    print(
+        "-" * 150
+    )
+
+    print()
+
+    print(
+        "UNIQUE DISCOVERY CANDIDATES"
+    )
+    print(
+        "-" * 150
+    )
+
+    for candidate in candidates:
+        record = candidate.record
 
         print(
             f"{candidate.candidate_id:<12} "
@@ -261,12 +387,7 @@ def main() -> None:
         )
 
     print(
-        "-" * 140
-    )
-
-    print(
-        f"unique_candidates="
-        f"{len(candidates)}"
+        "-" * 150
     )
 
     print()
@@ -275,7 +396,7 @@ def main() -> None:
         "SOURCE COUNTS"
     )
     print(
-        "-" * 130
+        "-" * 150
     )
 
     for (
@@ -295,7 +416,7 @@ def main() -> None:
         "QUERY COUNTS"
     )
     print(
-        "-" * 130
+        "-" * 150
     )
 
     for item in test_plan:
@@ -311,23 +432,15 @@ def main() -> None:
         "RAW DISCOVERY HITS"
     )
     print(
-        "-" * 130
+        "-" * 150
     )
 
     for hit in result.hits:
-        record = (
-            hit.record
-        )
+        record = hit.record
 
         oa_text = (
-            "OA"
-            if record.is_open_access
-            is True
-            else (
-                "CLOSED"
-                if record.is_open_access
-                is False
-                else "UNKNOWN"
+            format_oa_status(
+                record.is_open_access
             )
         )
 
@@ -342,7 +455,7 @@ def main() -> None:
         )
 
     print(
-        "-" * 130
+        "-" * 150
     )
 
 
