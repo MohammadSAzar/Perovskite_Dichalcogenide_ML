@@ -285,7 +285,7 @@ def test_build_crossref_url():
     assert (
         url.startswith(
             "https://api.crossref.org/"
-            "works?"
+            "v1/works?"
         )
     )
 
@@ -299,6 +299,11 @@ def test_build_crossref_url():
     assert (
         "mailto="
         "researcher%40example.com"
+        in url
+    )
+
+    assert (
+        "filter=type%3Ajournal-article"
         in url
     )
 

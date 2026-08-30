@@ -21,7 +21,7 @@ from psk_tmd.corpus.discovery.models import (
 # CROSSREF CONFIGURATION
 # ---------------------------------------------------------------------------
 CROSSREF_API_URL = (
-    "https://api.crossref.org/works"
+    "https://api.crossref.org/v1/works"
 )
 
 CROSSREF_SOURCE = "crossref"
@@ -429,6 +429,9 @@ def build_crossref_url(
     parameters = {
         "query.bibliographic": (
             query.strip()
+        ),
+        "filter": (
+            "type:journal-article"
         ),
         "rows": rows,
     }
