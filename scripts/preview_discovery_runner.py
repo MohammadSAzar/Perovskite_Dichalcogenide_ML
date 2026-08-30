@@ -16,8 +16,10 @@ from psk_tmd.corpus.discovery.runner import (
     run_discovery_plan,
 )
 from psk_tmd.corpus.discovery.screening import (
-    DiscoveryScreeningStatus,
     screen_discovery_record,
+)
+from psk_tmd.corpus.discovery.selection import (
+    select_discovery_candidates,
 )
 
 
@@ -37,7 +39,7 @@ def format_oa_status(
 
 
 # ---------------------------------------------------------------------------
-# PRINT CANDIDATE DETAILS
+# PRINT SCREENED CANDIDATE DETAILS
 # ---------------------------------------------------------------------------
 def print_screened_candidate_details(
     candidate,
@@ -152,50 +154,27 @@ def main() -> None:
         for candidate in candidates
     ]
 
-    passed_candidates = [
-        (
-            candidate,
-            screening,
+    selection = (
+        select_discovery_candidates(
+            screened_candidates
         )
-        for (
-            candidate,
-            screening,
-        ) in screened_candidates
-        if (
-            screening.status
-            == DiscoveryScreeningStatus.PASS
-        )
-    ]
+    )
 
-    review_candidates = [
-        (
-            candidate,
-            screening,
-        )
-        for (
-            candidate,
-            screening,
-        ) in screened_candidates
-        if (
-            screening.status
-            == DiscoveryScreeningStatus.REVIEW
-        )
-    ]
+    passed_candidates = (
+        selection.accepted
+    )
 
-    rejected_candidates = [
-        (
-            candidate,
-            screening,
-        )
-        for (
-            candidate,
-            screening,
-        ) in screened_candidates
-        if (
-            screening.status
-            == DiscoveryScreeningStatus.REJECT
-        )
-    ]
+    review_candidates = (
+        selection.review
+    )
+
+    rejected_candidates = (
+        selection.rejected
+    )
+
+    actionable_candidates = (
+        selection.actionable
+    )
 
     source_counts = Counter(
         hit.source
@@ -311,6 +290,11 @@ def main() -> None:
         f"{len(rejected_candidates)}"
     )
 
+    print(
+        f"screen_actionable="
+        f"{len(actionable_candidates)}"
+    )
+
     print()
 
     print(
@@ -359,6 +343,40 @@ def main() -> None:
         print_screened_candidate_details(
             candidate,
             screening,
+        )
+
+    print(
+        "-" * 150
+    )
+
+    print()
+
+    print(
+        "ACTIONABLE CANDIDATES"
+    )
+    print(
+        "-" * 150
+    )
+
+    if not actionable_candidates:
+        print(
+            "None"
+        )
+
+    for (
+        candidate,
+        screening,
+    ) in actionable_candidates:
+        record = candidate.record
+
+        print(
+            f"{candidate.candidate_id:<12} "
+            f"{screening.status.value.upper():<7} "
+            f"hits={candidate.hit_count:<2} "
+            f"queries={len(candidate.query_ids):<2} "
+            f"sources={','.join(candidate.sources):<20} "
+            f"{record.doi or '-':<35} "
+            f"{record.title[:65]}"
         )
 
     print(
