@@ -3,14 +3,17 @@ import pytest
 from psk_tmd.common.constants import (
     BandClaimContext,
     MaterialType,
+    ChargeTransferClass,
 )
 from psk_tmd.common.models import (
     MaterialBandRecord,
 )
 from psk_tmd.corpus.pair_band_alignment import (
+    validate_band_record_pair,
     build_pair_band_alignment,
     calculate_mediated_band_difference,
-    validate_band_record_pair,
+    is_band_offset_eligible,
+    validate_band_offset_eligibility,
 )
 
 
@@ -127,6 +130,10 @@ def test_build_pair_band_alignment():
                 "Manual mechanism "
                 "interpretation."
             ),
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
+            ),
         )
     )
 
@@ -207,6 +214,10 @@ def test_reversing_roles_changes_result():
             role_assignment_basis=(
                 "Test forward roles."
             ),
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
+            ),
         )
     )
 
@@ -219,6 +230,10 @@ def test_reversing_roles_changes_result():
             reduction_record=first,
             role_assignment_basis=(
                 "Test reversed roles."
+            ),
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
             ),
         )
     )
@@ -364,6 +379,10 @@ def test_missing_oxidation_cbm_fails():
             role_assignment_basis=(
                 "Manual assignment."
             ),
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
+            ),
         )
 
 
@@ -416,6 +435,10 @@ def test_missing_reduction_vbm_fails():
             role_assignment_basis=(
                 "Manual assignment."
             ),
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
+            ),
         )
 
 
@@ -466,5 +489,310 @@ def test_empty_role_basis_fails():
                 reduction_record
             ),
             role_assignment_basis="",
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
+            ),
         )
+
+
+# ---------------------------------------------------------------------------
+# TYPE-II IS BAND OFFSET ELIGIBLE
+# ---------------------------------------------------------------------------
+def test_type_ii_is_band_offset_eligible():
+    assert (
+        is_band_offset_eligible(
+            ChargeTransferClass.TYPE_II
+        )
+        is True
+    )
+
+
+# ---------------------------------------------------------------------------
+# MEDIATED RECOMBINATION IS BAND OFFSET ELIGIBLE
+# ---------------------------------------------------------------------------
+def test_mediated_recombination_is_band_offset_eligible():
+    assert (
+        is_band_offset_eligible(
+            ChargeTransferClass
+            .MEDIATED_RECOMBINATION
+        )
+        is True
+    )
+
+
+# ---------------------------------------------------------------------------
+# TYPE-I IS NOT BAND OFFSET ELIGIBLE
+# ---------------------------------------------------------------------------
+def test_type_i_is_not_band_offset_eligible():
+    assert (
+        is_band_offset_eligible(
+            ChargeTransferClass.TYPE_I
+        )
+        is False
+    )
+
+
+# ---------------------------------------------------------------------------
+# TYPE-III IS NOT BAND OFFSET ELIGIBLE
+# ---------------------------------------------------------------------------
+def test_type_iii_is_not_band_offset_eligible():
+    assert (
+        is_band_offset_eligible(
+            ChargeTransferClass.TYPE_III
+        )
+        is False
+    )
+
+
+# ---------------------------------------------------------------------------
+# PN IS NOT BAND OFFSET ELIGIBLE
+# ---------------------------------------------------------------------------
+def test_pn_is_not_band_offset_eligible():
+    assert (
+        is_band_offset_eligible(
+            ChargeTransferClass.PN
+        )
+        is False
+    )
+
+
+# ---------------------------------------------------------------------------
+# SCHOTTKY IS NOT BAND OFFSET ELIGIBLE
+# ---------------------------------------------------------------------------
+def test_schottky_is_not_band_offset_eligible():
+    assert (
+        is_band_offset_eligible(
+            ChargeTransferClass.SCHOTTKY
+        )
+        is False
+    )
+
+
+# ---------------------------------------------------------------------------
+# INVALID BAND OFFSET CLASS FAILS
+# ---------------------------------------------------------------------------
+@pytest.mark.parametrize(
+    "charge_transfer_class",
+    [
+        ChargeTransferClass.TYPE_I,
+        ChargeTransferClass.TYPE_III,
+        ChargeTransferClass.PN,
+        ChargeTransferClass.SCHOTTKY,
+    ],
+)
+def test_invalid_band_offset_class_fails(
+    charge_transfer_class,
+):
+    with pytest.raises(
+        ValueError,
+        match=(
+            "Band offset is defined only"
+        ),
+    ):
+        validate_band_offset_eligibility(
+            charge_transfer_class
+        )
+
+
+# ---------------------------------------------------------------------------
+# MAKE STANDARDIZED BAND RECORD
+# ---------------------------------------------------------------------------
+def make_standardized_band_record(
+    *,
+    band_record_id: str,
+    pair_id: str,
+    material_type: MaterialType,
+    formula: str,
+    cbm: float,
+    vbm: float,
+) -> MaterialBandRecord:
+    return MaterialBandRecord(
+        band_record_id=band_record_id,
+        paper_id="PPR-TEST",
+        pair_id=pair_id,
+        material_type=material_type,
+        formula_reported=formula,
+        formula_normalized=formula,
+        reported_band_gap_ev=None,
+        calculated_cbm_nhe_v=cbm,
+        calculated_vbm_nhe_v=vbm,
+    )
+
+
+# ---------------------------------------------------------------------------
+# TYPE-II BAND ALIGNMENT BUILDS
+# ---------------------------------------------------------------------------
+def test_type_ii_band_alignment_builds():
+    oxidation_record = (
+        make_standardized_band_record(
+            band_record_id="BAND-OP",
+            pair_id="PAIR-TEST",
+            material_type=(
+                MaterialType.PSK
+            ),
+            formula="CaTiO3",
+            cbm=-0.89,
+            vbm=2.67,
+        )
+    )
+
+    reduction_record = (
+        make_standardized_band_record(
+            band_record_id="BAND-RP",
+            pair_id="PAIR-TEST",
+            material_type=(
+                MaterialType.TMD
+            ),
+            formula="MoS2",
+            cbm=-0.11,
+            vbm=1.77,
+        )
+    )
+
+    alignment = (
+        build_pair_band_alignment(
+            band_alignment_id=(
+                "ALIGN-001"
+            ),
+            oxidation_record=(
+                oxidation_record
+            ),
+            reduction_record=(
+                reduction_record
+            ),
+            charge_transfer_class=(
+                ChargeTransferClass.TYPE_II
+            ),
+            role_assignment_basis=(
+                "Explicit Type-II "
+                "charge-transfer assignment."
+            ),
+        )
+    )
+
+    assert (
+        alignment
+        .mediated_band_difference_nhe_v
+        == pytest.approx(
+            -2.66
+        )
+    )
+
+
+# ---------------------------------------------------------------------------
+# MEDIATED BAND ALIGNMENT BUILDS
+# ---------------------------------------------------------------------------
+def test_mediated_band_alignment_builds():
+    oxidation_record = (
+        make_standardized_band_record(
+            band_record_id="BAND-OP",
+            pair_id="PAIR-TEST",
+            material_type=(
+                MaterialType.PSK
+            ),
+            formula="CaTiO3",
+            cbm=-0.89,
+            vbm=2.67,
+        )
+    )
+
+    reduction_record = (
+        make_standardized_band_record(
+            band_record_id="BAND-RP",
+            pair_id="PAIR-TEST",
+            material_type=(
+                MaterialType.TMD
+            ),
+            formula="MoS2",
+            cbm=-0.11,
+            vbm=1.77,
+        )
+    )
+
+    alignment = (
+        build_pair_band_alignment(
+            band_alignment_id=(
+                "ALIGN-002"
+            ),
+            oxidation_record=(
+                oxidation_record
+            ),
+            reduction_record=(
+                reduction_record
+            ),
+            charge_transfer_class=(
+                ChargeTransferClass
+                .MEDIATED_RECOMBINATION
+            ),
+            role_assignment_basis=(
+                "Curated Z-scheme "
+                "charge-transfer assignment."
+            ),
+        )
+    )
+
+    assert (
+        alignment
+        .mediated_band_difference_nhe_v
+        == pytest.approx(
+            -2.66
+        )
+    )
+
+
+# ---------------------------------------------------------------------------
+# TYPE-I BAND ALIGNMENT IS REJECTED
+# ---------------------------------------------------------------------------
+def test_type_i_band_alignment_is_rejected():
+    oxidation_record = (
+        make_standardized_band_record(
+            band_record_id="BAND-OP",
+            pair_id="PAIR-TEST",
+            material_type=(
+                MaterialType.PSK
+            ),
+            formula="LaNiO3",
+            cbm=-0.13,
+            vbm=2.41,
+        )
+    )
+
+    reduction_record = (
+        make_standardized_band_record(
+            band_record_id="BAND-RP",
+            pair_id="PAIR-TEST",
+            material_type=(
+                MaterialType.TMD
+            ),
+            formula="MoS2",
+            cbm=-0.13,
+            vbm=1.79,
+        )
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=(
+            "Band offset is defined only"
+        ),
+    ):
+        build_pair_band_alignment(
+            band_alignment_id=(
+                "ALIGN-003"
+            ),
+            oxidation_record=(
+                oxidation_record
+            ),
+            reduction_record=(
+                reduction_record
+            ),
+            charge_transfer_class=(
+                ChargeTransferClass.TYPE_I
+            ),
+            role_assignment_basis=(
+                "Type-I test."
+            ),
+        )
+
 
