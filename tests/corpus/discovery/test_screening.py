@@ -34,8 +34,10 @@ def make_record(
 # ---------------------------------------------------------------------------
 def test_normalize_screening_text():
     result = normalize_screening_text(
-        "MoS₂ / CaTiO₃ — "
-        "Visible-Light Photocatalysis"
+        (
+            "MoS₂ / CaTiO₃ — "
+            "Visible-Light Photocatalysis"
+        )
     )
 
     assert result == (
@@ -137,9 +139,9 @@ def test_find_case_sensitive_halide_formula():
 
 
 # ---------------------------------------------------------------------------
-# OXIDE FORMULA TARGET PASSES
+# KNOWN OXIDE FORMULA PASSES
 # ---------------------------------------------------------------------------
-def test_oxide_formula_target_passes():
+def test_known_oxide_formula_passes():
     record = make_record(
         title=(
             "CaTiO3/MoS2 "
@@ -159,25 +161,24 @@ def test_oxide_formula_target_passes():
     )
 
     assert (
-        result.has_oxide_perovskite_signal
-        is True
+        result.matched_abo3_formulas
+        == (
+            "CaTiO3",
+        )
     )
 
     assert (
-        result.has_halide_perovskite_signal
-        is False
-    )
-
-    assert (
-        result.passes_screen
-        is True
+        result.matched_known_perovskite_formulas
+        == (
+            "CaTiO3",
+        )
     )
 
 
 # ---------------------------------------------------------------------------
-# EXPLICIT OXIDE PEROVSKITE TARGET PASSES
+# EXPLICIT OXIDE PEROVSKITE PASSES
 # ---------------------------------------------------------------------------
-def test_explicit_oxide_perovskite_target_passes():
+def test_explicit_oxide_perovskite_passes():
     record = make_record(
         title=(
             "Perovskite oxide/MoS2 "
@@ -202,41 +203,12 @@ def test_explicit_oxide_perovskite_target_passes():
 
 
 # ---------------------------------------------------------------------------
-# LACO3 TARGET PASSES
+# UNKNOWN ABO3 NEEDS REVIEW
 # ---------------------------------------------------------------------------
-def test_laco3_target_passes():
+def test_unknown_abo3_needs_review():
     record = make_record(
         title=(
-            "LaCoO3/MoS2 "
-            "heterostructure for "
-            "visible-light photocatalysis"
-        ),
-    )
-
-    result = screen_discovery_record(
-        record
-    )
-
-    assert (
-        result.status
-        == DiscoveryScreeningStatus.PASS
-    )
-
-    assert (
-        result.matched_perovskite_formulas
-        == (
-            "LaCoO3",
-        )
-    )
-
-
-# ---------------------------------------------------------------------------
-# GENERIC PEROVSKITE TARGET NEEDS REVIEW
-# ---------------------------------------------------------------------------
-def test_generic_perovskite_target_needs_review():
-    record = make_record(
-        title=(
-            "Perovskite/MoS2 "
+            "FeTiO3/MoS2 "
             "heterostructure for "
             "photocatalysis"
         ),
@@ -252,8 +224,75 @@ def test_generic_perovskite_target_needs_review():
     )
 
     assert (
-        result.passes_screen
+        result.matched_abo3_formulas
+        == (
+            "FeTiO3",
+        )
+    )
+
+    assert (
+        result.matched_known_perovskite_formulas
+        == ()
+    )
+
+
+# ---------------------------------------------------------------------------
+# HCO3 DOES NOT CREATE PASS
+# ---------------------------------------------------------------------------
+def test_hco3_does_not_create_pass():
+    record = make_record(
+        title=(
+            "HCO3 and MoS2 during "
+            "photocatalysis"
+        ),
+    )
+
+    result = screen_discovery_record(
+        record
+    )
+
+    assert (
+        result.status
+        == DiscoveryScreeningStatus.REVIEW
+    )
+
+    assert (
+        result.matched_abo3_formulas
+        == (
+            "HCO3",
+        )
+    )
+
+    assert (
+        result.matched_known_perovskite_formulas
+        == ()
+    )
+
+    assert (
+        result.has_oxide_perovskite_signal
         is False
+    )
+
+
+# ---------------------------------------------------------------------------
+# GENERIC PEROVSKITE NEEDS REVIEW
+# ---------------------------------------------------------------------------
+def test_generic_perovskite_needs_review():
+    record = make_record(
+        title=(
+            "Perovskite/MoS2 "
+            "heterostructure for "
+            "photocatalysis"
+        ),
+    )
+
+    result = screen_discovery_record(
+        record
+    )
+
+    assert (
+        result.status
+        == DiscoveryScreeningStatus.REVIEW
     )
 
 
@@ -285,9 +324,9 @@ def test_halide_perovskite_term_rejected():
 
 
 # ---------------------------------------------------------------------------
-# CSPBBR3 HALIDE FORMULA REJECTED
+# CSPBBR3 REJECTED
 # ---------------------------------------------------------------------------
-def test_cspbbr3_halide_formula_rejected():
+def test_cspbbr3_rejected():
     record = make_record(
         title=(
             "CsPbBr3 perovskite "
@@ -315,9 +354,9 @@ def test_cspbbr3_halide_formula_rejected():
 
 
 # ---------------------------------------------------------------------------
-# CONFLICTING OXIDE AND HALIDE SIGNALS NEED REVIEW
+# CONFLICTING SIGNALS NEED REVIEW
 # ---------------------------------------------------------------------------
-def test_conflicting_perovskite_signals_need_review():
+def test_conflicting_signals_need_review():
     record = make_record(
         title=(
             "CaTiO3 and CsPbBr3 "
@@ -373,9 +412,9 @@ def test_abstract_can_supply_photo_signal():
 
 
 # ---------------------------------------------------------------------------
-# SOLAR CELL RECORD REJECTED
+# NO PHOTO SIGNAL REJECTED
 # ---------------------------------------------------------------------------
-def test_solar_cell_record_rejected():
+def test_no_photo_signal_rejected():
     record = make_record(
         title=(
             "CaTiO3/MoS2 materials "
@@ -399,9 +438,9 @@ def test_solar_cell_record_rejected():
 
 
 # ---------------------------------------------------------------------------
-# NON-TMD PHOTOCATALYST REJECTED
+# NO TMD REJECTED
 # ---------------------------------------------------------------------------
-def test_non_tmd_photocatalyst_rejected():
+def test_no_tmd_rejected():
     record = make_record(
         title=(
             "CaTiO3 photocatalyst "
@@ -418,16 +457,11 @@ def test_non_tmd_photocatalyst_rejected():
         == DiscoveryScreeningStatus.REJECT
     )
 
-    assert (
-        result.has_tmd_signal
-        is False
-    )
-
 
 # ---------------------------------------------------------------------------
-# NON-PEROVSKITE MOS2 REJECTED
+# NO PEROVSKITE REJECTED
 # ---------------------------------------------------------------------------
-def test_non_perovskite_mos2_rejected():
+def test_no_perovskite_rejected():
     record = make_record(
         title=(
             "MoS2/g-C3N4 composite "
@@ -444,38 +478,16 @@ def test_non_perovskite_mos2_rejected():
         == DiscoveryScreeningStatus.REJECT
     )
 
-    assert (
-        result.has_perovskite_signal
-        is False
-    )
-
 
 # ---------------------------------------------------------------------------
-# RESOLVE NO TMD
+# RESOLVE UNKNOWN ABO3
 # ---------------------------------------------------------------------------
-def test_resolve_screening_status_no_tmd():
-    status, _ = resolve_screening_status(
-        has_perovskite_signal=True,
-        has_oxide_perovskite_signal=True,
-        has_halide_perovskite_signal=False,
-        has_tmd_signal=False,
-        has_photo_signal=True,
-    )
-
-    assert (
-        status
-        == DiscoveryScreeningStatus.REJECT
-    )
-
-
-# ---------------------------------------------------------------------------
-# RESOLVE GENERIC PEROVSKITE
-# ---------------------------------------------------------------------------
-def test_resolve_screening_status_generic_perovskite():
+def test_resolve_unknown_abo3():
     status, _ = resolve_screening_status(
         has_perovskite_signal=True,
         has_oxide_perovskite_signal=False,
         has_halide_perovskite_signal=False,
+        has_abo3_signal=True,
         has_tmd_signal=True,
         has_photo_signal=True,
     )
@@ -485,4 +497,22 @@ def test_resolve_screening_status_generic_perovskite():
         == DiscoveryScreeningStatus.REVIEW
     )
 
+
+# ---------------------------------------------------------------------------
+# RESOLVE KNOWN OXIDE
+# ---------------------------------------------------------------------------
+def test_resolve_known_oxide():
+    status, _ = resolve_screening_status(
+        has_perovskite_signal=True,
+        has_oxide_perovskite_signal=True,
+        has_halide_perovskite_signal=False,
+        has_abo3_signal=True,
+        has_tmd_signal=True,
+        has_photo_signal=True,
+    )
+
+    assert (
+        status
+        == DiscoveryScreeningStatus.PASS
+    )
 

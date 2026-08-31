@@ -65,6 +65,11 @@ def make_screening(
     candidate_id: str,
     status: DiscoveryScreeningStatus,
 ) -> DiscoveryScreeningResult:
+    is_pass = (
+        status
+        == DiscoveryScreeningStatus.PASS
+    )
+
     return DiscoveryScreeningResult(
         discovery_id=(
             candidate_id
@@ -72,19 +77,35 @@ def make_screening(
         status=status,
         has_perovskite_signal=True,
         has_oxide_perovskite_signal=(
-            status
-            == DiscoveryScreeningStatus.PASS
+            is_pass
         ),
         has_halide_perovskite_signal=False,
         has_tmd_signal=True,
         has_photo_signal=True,
         matched_perovskite_terms=(),
-        matched_perovskite_formulas=(),
+        matched_abo3_formulas=(
+            (
+                "CaTiO3",
+            )
+            if is_pass
+            else ()
+        ),
+        matched_known_perovskite_formulas=(
+            (
+                "CaTiO3",
+            )
+            if is_pass
+            else ()
+        ),
         matched_oxide_perovskite_terms=(),
         matched_halide_perovskite_terms=(),
         matched_halide_perovskite_formulas=(),
-        matched_tmd_terms=(),
-        matched_photo_terms=(),
+        matched_tmd_terms=(
+            "mos2",
+        ),
+        matched_photo_terms=(
+            "photocatalytic",
+        ),
         reason="Test reason.",
     )
 
@@ -243,4 +264,5 @@ def test_empty_input():
         selection.actionable
         == ()
     )
+
 

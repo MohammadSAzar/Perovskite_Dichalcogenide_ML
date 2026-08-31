@@ -44,21 +44,63 @@ class DiscoveryScreeningResult:
 
     has_photo_signal: bool
 
-    matched_perovskite_terms: tuple[str, ...]
+    matched_perovskite_terms: tuple[
+        str,
+        ...
+    ]
 
-    matched_perovskite_formulas: tuple[str, ...]
+    matched_abo3_formulas: tuple[
+        str,
+        ...
+    ]
 
-    matched_oxide_perovskite_terms: tuple[str, ...]
+    matched_known_perovskite_formulas: tuple[
+        str,
+        ...
+    ]
 
-    matched_halide_perovskite_terms: tuple[str, ...]
+    matched_oxide_perovskite_terms: tuple[
+        str,
+        ...
+    ]
 
-    matched_halide_perovskite_formulas: tuple[str, ...]
+    matched_halide_perovskite_terms: tuple[
+        str,
+        ...
+    ]
 
-    matched_tmd_terms: tuple[str, ...]
+    matched_halide_perovskite_formulas: tuple[
+        str,
+        ...
+    ]
 
-    matched_photo_terms: tuple[str, ...]
+    matched_tmd_terms: tuple[
+        str,
+        ...
+    ]
+
+    matched_photo_terms: tuple[
+        str,
+        ...
+    ]
 
     reason: str
+
+    @property
+    def matched_perovskite_formulas(
+        self,
+    ) -> tuple[
+        str,
+        ...
+    ]:
+        """
+        Compatibility alias for existing scripts.
+
+        This returns only known oxide-perovskite formulas.
+        """
+        return (
+            self.matched_known_perovskite_formulas
+        )
 
     @property
     def passes_screen(
@@ -218,14 +260,10 @@ def find_matched_terms(
     str,
     ...
 ]:
-    matches = [
+    return tuple(
         term
         for term in terms
         if term in text
-    ]
-
-    return tuple(
-        matches
     )
 
 
@@ -242,14 +280,10 @@ def find_case_sensitive_formulas(
     str,
     ...
 ]:
-    matches = [
+    return tuple(
         formula
         for formula in formulas
         if formula in text
-    ]
-
-    return tuple(
-        matches
     )
 
 
@@ -261,6 +295,7 @@ def resolve_screening_status(
     has_perovskite_signal: bool,
     has_oxide_perovskite_signal: bool,
     has_halide_perovskite_signal: bool,
+    has_abo3_signal: bool,
     has_tmd_signal: bool,
     has_photo_signal: bool,
 ) -> tuple[
@@ -276,7 +311,11 @@ def resolve_screening_status(
     if not has_photo_signal:
         return (
             DiscoveryScreeningStatus.REJECT,
-            "No photocatalytic or photo-assisted signal was detected.",
+            (
+                "No photocatalytic or "
+                "photo-assisted signal "
+                "was detected."
+            ),
         )
 
     if (
@@ -286,7 +325,8 @@ def resolve_screening_status(
         return (
             DiscoveryScreeningStatus.REVIEW,
             (
-                "Both oxide-perovskite and halide-perovskite "
+                "Both oxide-perovskite "
+                "and halide-perovskite "
                 "signals were detected."
             ),
         )
@@ -294,24 +334,37 @@ def resolve_screening_status(
     if has_oxide_perovskite_signal:
         return (
             DiscoveryScreeningStatus.PASS,
-            "Explicit oxide-perovskite evidence was detected.",
+            (
+                "High-confidence "
+                "oxide-perovskite "
+                "evidence was detected."
+            ),
         )
 
     if has_halide_perovskite_signal:
         return (
             DiscoveryScreeningStatus.REJECT,
             (
-                "Halide-perovskite evidence was detected without "
-                "oxide-perovskite evidence."
+                "Halide-perovskite "
+                "evidence was detected "
+                "without oxide-perovskite "
+                "evidence."
             ),
         )
 
-    if has_perovskite_signal:
+    if (
+        has_perovskite_signal
+        or has_abo3_signal
+    ):
         return (
             DiscoveryScreeningStatus.REVIEW,
             (
-                "Generic perovskite evidence was detected, but oxide "
-                "identity could not be established from metadata."
+                "Potential perovskite "
+                "evidence was detected, "
+                "but oxide-perovskite "
+                "identity could not be "
+                "established confidently "
+                "from metadata."
             ),
         )
 
@@ -377,9 +430,14 @@ def screen_discovery_record(
         photo_matches
     )
 
+    has_abo3_signal = bool(
+        material_signals
+        .matched_abo3_formulas
+    )
+
     has_oxide_perovskite_signal = bool(
         material_signals
-        .matched_perovskite_formulas
+        .matched_known_perovskite_formulas
         or oxide_term_matches
     )
 
@@ -399,6 +457,9 @@ def screen_discovery_record(
             ),
             has_halide_perovskite_signal=(
                 has_halide_perovskite_signal
+            ),
+            has_abo3_signal=(
+                has_abo3_signal
             ),
             has_tmd_signal=(
                 material_signals
@@ -436,9 +497,13 @@ def screen_discovery_record(
             material_signals
             .matched_perovskite_terms
         ),
-        matched_perovskite_formulas=(
+        matched_abo3_formulas=(
             material_signals
-            .matched_perovskite_formulas
+            .matched_abo3_formulas
+        ),
+        matched_known_perovskite_formulas=(
+            material_signals
+            .matched_known_perovskite_formulas
         ),
         matched_oxide_perovskite_terms=(
             oxide_term_matches
@@ -476,5 +541,4 @@ def screen_discovery_records(
         )
         for record in records
     ]
-
 

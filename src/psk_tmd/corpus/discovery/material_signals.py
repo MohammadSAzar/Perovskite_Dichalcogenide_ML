@@ -14,15 +14,47 @@ class MaterialSignalResult:
 
     has_tmd_signal: bool
 
-    matched_perovskite_terms: tuple[str, ...]
+    matched_perovskite_terms: tuple[
+        str,
+        ...
+    ]
 
-    matched_perovskite_formulas: tuple[str, ...]
+    matched_abo3_formulas: tuple[
+        str,
+        ...
+    ]
 
-    matched_tmd_terms: tuple[str, ...]
+    matched_known_perovskite_formulas: tuple[
+        str,
+        ...
+    ]
+
+    matched_tmd_terms: tuple[
+        str,
+        ...
+    ]
+
+    @property
+    def matched_perovskite_formulas(
+        self,
+    ) -> tuple[
+        str,
+        ...
+    ]:
+        """
+        Compatibility alias.
+
+        Only known oxide-perovskite formulas are returned here.
+        Generic ABO3-like matches must not be interpreted as
+        confirmed perovskite structures.
+        """
+        return (
+            self.matched_known_perovskite_formulas
+        )
 
 
 # ---------------------------------------------------------------------------
-# MATERIAL TERMS
+# PEROVSKITE TERMS
 # ---------------------------------------------------------------------------
 PEROVSKITE_TERMS = (
     "perovskite",
@@ -33,6 +65,25 @@ PEROVSKITE_TERMS = (
     "perovskite like",
 )
 
+
+# ---------------------------------------------------------------------------
+# KNOWN OXIDE PEROVSKITE FORMULAS
+# ---------------------------------------------------------------------------
+KNOWN_OXIDE_PEROVSKITE_FORMULAS = (
+    "BaTiO3",
+    "BiFeO3",
+    "CaTiO3",
+    "LaCoO3",
+    "LaFeO3",
+    "LaNiO3",
+    "PbTiO3",
+    "SrTiO3",
+)
+
+
+# ---------------------------------------------------------------------------
+# TMD TERMS
+# ---------------------------------------------------------------------------
 TMD_TERMS = (
     "mos2",
     "ws2",
@@ -43,22 +94,19 @@ TMD_TERMS = (
     "mosse",
     "wsse",
     "transition metal dichalcogenide",
-    "transition-metal dichalcogenide",
     "transition metal dichalcogenides",
-    "transition-metal dichalcogenides",
 )
 
 
 # ---------------------------------------------------------------------------
-# OXIDE PEROVSKITE FORMULA PATTERN
+# ABO3-LIKE FORMULA PATTERN
 # ---------------------------------------------------------------------------
-OXIDE_PEROVSKITE_FORMULA_PATTERN = re.compile(
-    r"\b"
-    r"(?:[A-Z][a-z]?"
-    r"(?:\d+(?:\.\d+)?)?)"
-    r"{2}"
-    r"O3"
-    r"\b"
+ABO3_FORMULA_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9])"
+    r"([A-Z][a-z]?"
+    r"[A-Z][a-z]?"
+    r"O3)"
+    r"(?![A-Za-z0-9])"
 )
 
 
@@ -68,7 +116,7 @@ OXIDE_PEROVSKITE_FORMULA_PATTERN = re.compile(
 def normalize_material_text(
     value: str,
 ) -> str:
-    return (
+    normalized = (
         value
         .replace(
             "₂",
@@ -88,11 +136,15 @@ def normalize_material_text(
         )
     )
 
+    return " ".join(
+        normalized.split()
+    )
+
 
 # ---------------------------------------------------------------------------
-# FIND TERM MATCHES
+# FIND MATCHED TERMS
 # ---------------------------------------------------------------------------
-def find_material_terms(
+def find_matched_terms(
     text: str,
     terms: tuple[
         str,
@@ -102,53 +154,65 @@ def find_material_terms(
     str,
     ...
 ]:
-    lowered = text.lower()
-
-    matches = [
-        term
-        for term in terms
-        if term in lowered
-    ]
+    normalized_text = (
+        text.lower()
+    )
 
     return tuple(
-        matches
+        term
+        for term in terms
+        if term in normalized_text
     )
 
 
 # ---------------------------------------------------------------------------
-# FIND OXIDE PEROVSKITE FORMULAS
+# FIND ABO3-LIKE FORMULAS
 # ---------------------------------------------------------------------------
-def find_oxide_perovskite_formulas(
+def find_abo3_formulas(
     text: str,
 ) -> tuple[
     str,
     ...
 ]:
-    normalized = (
-        normalize_material_text(
-            text
+    matches = {
+        match.group(
+            1
         )
-    )
-
-    matches = (
-        OXIDE_PEROVSKITE_FORMULA_PATTERN
-        .findall(
-            normalized
-        )
-    )
-
-    unique_matches: list[
-        str
-    ] = []
-
-    for match in matches:
-        if match not in unique_matches:
-            unique_matches.append(
-                match
+        for match in (
+            ABO3_FORMULA_PATTERN
+            .finditer(
+                text
             )
+        )
+    }
 
     return tuple(
-        unique_matches
+        sorted(
+            matches
+        )
+    )
+
+
+# ---------------------------------------------------------------------------
+# FIND KNOWN PEROVSKITE FORMULAS
+# ---------------------------------------------------------------------------
+def find_known_perovskite_formulas(
+    formulas: tuple[
+        str,
+        ...
+    ],
+) -> tuple[
+    str,
+    ...
+]:
+    known_formulas = set(
+        KNOWN_OXIDE_PEROVSKITE_FORMULAS
+    )
+
+    return tuple(
+        formula
+        for formula in formulas
+        if formula in known_formulas
     )
 
 
@@ -156,50 +220,67 @@ def find_oxide_perovskite_formulas(
 # DETECT MATERIAL SIGNALS
 # ---------------------------------------------------------------------------
 def detect_material_signals(
-    text: str,
+    value: str,
 ) -> MaterialSignalResult:
-    normalized = (
+    text = (
         normalize_material_text(
-            text
+            value
         )
     )
 
-    perovskite_terms = (
-        find_material_terms(
-            normalized,
+    matched_perovskite_terms = (
+        find_matched_terms(
+            text,
             PEROVSKITE_TERMS,
         )
     )
 
-    perovskite_formulas = (
-        find_oxide_perovskite_formulas(
-            normalized
+    matched_abo3_formulas = (
+        find_abo3_formulas(
+            text
         )
     )
 
-    tmd_terms = (
-        find_material_terms(
-            normalized,
+    matched_known_perovskite_formulas = (
+        find_known_perovskite_formulas(
+            matched_abo3_formulas
+        )
+    )
+
+    matched_tmd_terms = (
+        find_matched_terms(
+            text,
             TMD_TERMS,
         )
     )
 
+    has_perovskite_signal = bool(
+        matched_perovskite_terms
+        or matched_abo3_formulas
+    )
+
+    has_tmd_signal = bool(
+        matched_tmd_terms
+    )
+
     return MaterialSignalResult(
-        has_perovskite_signal=bool(
-            perovskite_terms
-            or perovskite_formulas
+        has_perovskite_signal=(
+            has_perovskite_signal
         ),
-        has_tmd_signal=bool(
-            tmd_terms
+        has_tmd_signal=(
+            has_tmd_signal
         ),
         matched_perovskite_terms=(
-            perovskite_terms
+            matched_perovskite_terms
         ),
-        matched_perovskite_formulas=(
-            perovskite_formulas
+        matched_abo3_formulas=(
+            matched_abo3_formulas
+        ),
+        matched_known_perovskite_formulas=(
+            matched_known_perovskite_formulas
         ),
         matched_tmd_terms=(
-            tmd_terms
+            matched_tmd_terms
         ),
     )
 
