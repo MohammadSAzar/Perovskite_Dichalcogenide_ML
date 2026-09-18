@@ -12,6 +12,8 @@ dist/
 *.egg-info/
 .env
 .env.*
+.env.local
+.env.*.local
 *.log
 data/raw/
 data/interim/
@@ -19,4 +21,3 @@ tmp/
 temp/
 .DS_Store
 Thumbs.db
-

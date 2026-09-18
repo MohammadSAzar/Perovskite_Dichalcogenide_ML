@@ -35,7 +35,7 @@ INPUT_PATH = (
     / "corpus"
     / "access"
     / "pilot_v0_1"
-    / "openalex_access_evidence.json"
+    / "access_evidence_with_arxiv_license.json"
 )
 
 OUTPUT_DIR = (

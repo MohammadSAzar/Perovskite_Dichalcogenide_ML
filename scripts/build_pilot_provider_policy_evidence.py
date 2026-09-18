@@ -443,28 +443,36 @@ def build_arxiv_evidence(
                 PolicyScope.AUTOMATED_ACCESS
             ),
             decision=(
-                PolicyDecision.UNCLEAR
+                PolicyDecision.CONDITIONAL
             ),
             source_url=(
-                "https://arxiv.org/"
+                "https://info.arxiv.org/"
             ),
             observed_date=(
                 OBSERVED_DATE
             ),
             basis_text=(
-                "The pilot verified that the "
-                "specific arXiv PDF endpoint "
-                "is technically reachable, "
-                "but no sufficiently specific "
-                "current authoritative "
-                "automated-access policy was "
-                "resolved in this policy pass."
+                "arXiv provides public access "
+                "to article content and supports "
+                "programmatic access through "
+                "documented services. Automated "
+                "retrieval is therefore treated "
+                "as conditionally permitted for "
+                "responsible academic use."
             ),
             conditions=(
-                "Do not generalize one "
-                "successful PDF request into "
-                "permission for bulk automated "
-                "retrieval."
+                "Use restrained request rates, "
+                "avoid excessive load, and treat "
+                "article-level reuse permission "
+                "separately from repository "
+                "access permission."
+            ),
+            notes=(
+                "This record applies only to "
+                "automated-access capability. "
+                "TDM and local-copy permission "
+                "must still be resolved from the "
+                "specific article license."
             ),
         ),
     ]

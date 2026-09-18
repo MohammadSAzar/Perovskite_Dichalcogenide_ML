@@ -1,7 +1,14 @@
 import os
 
+from dotenv import (
+    load_dotenv,
+)
 from pydantic import (
     BaseModel,
+)
+
+from psk_tmd.common.config import (
+    PROJECT_ROOT,
 )
 
 
@@ -10,6 +17,22 @@ from pydantic import (
 # ---------------------------------------------------------------------------
 ELSEVIER_API_KEY_ENV = (
     "ELSEVIER_API_KEY"
+)
+
+PROJECT_ENV_PATH = (
+    PROJECT_ROOT
+    / ".env"
+)
+
+
+# ---------------------------------------------------------------------------
+# LOAD PROJECT ENVIRONMENT
+# ---------------------------------------------------------------------------
+load_dotenv(
+    dotenv_path=(
+        PROJECT_ENV_PATH
+    ),
+    override=False,
 )
 
 
@@ -91,7 +114,8 @@ def get_elsevier_api_key(
             "Elsevier API key is not "
             "configured. Set the "
             f"{ELSEVIER_API_KEY_ENV} "
-            "environment variable."
+            "environment variable or add "
+            "it to the project .env file."
         )
 
     return api_key
